@@ -9,24 +9,44 @@ namespace ModelTests
     public class RandomDiceTests
     {
         /// <summary>
-        /// Should generate different random dice sides.
+        /// Should fail when Dice side array is null.
         /// </summary>
         [TestMethod]
-        public void ShouldGenerateDifferentRandomDiceSides()
+        public void ShouldFailCreateWhenDiceSideArrayIsNull()
+        {
+            // when & then
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                RandomDice dice = new RandomDice(null);
+            });
+        }
+
+        /// <summary>
+        /// Should generate different random dice results.
+        /// </summary>
+        [TestMethod]
+        public void ShouldGenerateDifferentDiceResults()
         {
             // given
-            DiceSide[] sides = [new("A1"), new("A2"), new("A3"), new("A4"), new("A5"), new("A6")];
+            GameBoardField[] sides = [
+                GameBoardField.A1,
+                GameBoardField.A3,
+                GameBoardField.A4,
+                GameBoardField.C3,
+                GameBoardField.C5,
+                GameBoardField.F6];
+
             RandomDice dice = new(sides);
 
             int count = 5;
             bool differentRolls = false;
 
             // when
-            DiceSide initialRoll = dice.GenerateDiceSide();
+            GameBoardField initialRoll = dice.GenerateDiceResult();
 
             for (int i = 0; i < count; i++)
             {
-                DiceSide newRoll = dice.GenerateDiceSide();
+                GameBoardField newRoll = dice.GenerateDiceResult();
 
                 if (initialRoll != newRoll)
                 {
@@ -36,6 +56,30 @@ namespace ModelTests
             }
 
             Assert.IsTrue(differentRolls);
+        }
+
+        /// <summary>
+        /// Should get correct dice side count.
+        /// </summary>
+        [TestMethod]
+        public void ShouldGetCorrectDiceSideCount()
+        {
+            // given
+            GameBoardField[] sides = [
+                GameBoardField.A1,
+                GameBoardField.A3,
+                GameBoardField.A4,
+                GameBoardField.C3,
+                GameBoardField.C5,
+                GameBoardField.F6];
+
+            // when
+            RandomDice dice = new(sides);
+
+            // then
+            Assert.AreEqual(
+                actual: dice.GetDiceSideCount(),
+                expected: sides.Count());
         }
     }
 }

@@ -15,12 +15,12 @@
         /// Get all dice sides contained in this object.
         /// </summary>
         /// <returns></returns>
-        public DiceSide[] GetAllDiceSides();
+        public GameBoardField[] GetAllDiceSides();
 
         /// <summary>
         /// Generate dice throw result.
         /// </summary>
         /// <returns>DiceSide.</returns>
-        public DiceSide GenerateDiceSide();
+        public GameBoardField GenerateDiceResult();
     }
 }

@@ -8,14 +8,14 @@
         private static Random Random = new Random();
 
         private int diceSideCount;
-        private DiceSide[] diceSides;
+        private GameBoardField[] diceSides;
 
         /// <summary>
         /// Ctor.
         /// </summary>
-        public RandomDice(DiceSide[] sides)
+        public RandomDice(GameBoardField[] sides)
         {
-            this.diceSides = sides;
+            this.diceSides = sides ?? throw new ArgumentNullException("Dice side array should not be null");
             this.diceSideCount = sides.Count();
         }
 
@@ -24,15 +24,15 @@
         public int GetDiceSideCount() => diceSides.Count();
 
         /// <inheritdoc/>
-        public DiceSide[] GetAllDiceSides() =>
-            (DiceSide[])diceSides.Clone();
+        public GameBoardField[] GetAllDiceSides() =>
+            (GameBoardField[])diceSides.Clone();
 
         /// <inheritdoc/>
-        public DiceSide GenerateDiceSide()
+        public GameBoardField GenerateDiceResult()
         {
            int randomSide = Random.Next(diceSideCount);
 
-            return diceSides[randomSide];
+           return diceSides[randomSide];
         }
     }
 }
