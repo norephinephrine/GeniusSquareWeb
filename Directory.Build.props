@@ -1,6 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+		<IsPublishable Condition="'$(IsPublishable)' == '' ">false</IsPublishable>
 	</PropertyGroup>
 
 	<PropertyGroup>
