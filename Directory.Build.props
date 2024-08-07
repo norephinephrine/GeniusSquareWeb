@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+	</PropertyGroup>
+
+	<PropertyGroup>
+	   <BuildOutputRoot>$(MsBuildThisFileDirectory.TrimEnd('\\'))\out</BuildOutputRoot>	   
+       <BaseOutputPath>$(BuildOutputRoot)\$(MSBuildProjectName)</BaseOutputPath>
+	   <BaseIntermediateOutputPath Condition="'$(PublishDir)' == '' ">$(BuildOutputRoot)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	   <PublishDir Condition="'$(PublishDir)' == '' ">$(BuildOutputRoot)\publish\$(MSBuildProjectName)</PublishDir>
+   </PropertyGroup>
+</Project>
