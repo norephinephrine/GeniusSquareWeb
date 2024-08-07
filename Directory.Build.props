@@ -1,13 +1,22 @@
 <Project>
+	<!-- Ensures if this file changes, projects will be rebuild. -->
 	<PropertyGroup>
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-		<IsPublishable Condition="'$(IsPublishable)' == '' ">false</IsPublishable>
 	</PropertyGroup>
 
+	<!-- Path to build output root. -->
 	<PropertyGroup>
 	   <BuildOutputRoot>$(MsBuildThisFileDirectory.TrimEnd('\\'))\out</BuildOutputRoot>	   
-       <BaseOutputPath>$(BuildOutputRoot)\$(MSBuildProjectName)</BaseOutputPath>
-	   <BaseIntermediateOutputPath Condition="'$(PublishDir)' == '' ">$(BuildOutputRoot)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-	   <PublishDir Condition="'$(PublishDir)' == '' ">$(BuildOutputRoot)\publish\$(MSBuildProjectName)</PublishDir>
-   </PropertyGroup>
+	</PropertyGroup>
+   
+    <!-- Intermediate output path. -->
+	<PropertyGroup>
+	   <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)' == '' ">$(BuildOutputRoot)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath> 
+	</PropertyGroup>
+   
+	<!-- Publish path. -->
+	<PropertyGroup>
+   	   <PublishDir Condition="'$(PublishDir)' == '' ">$(BuildOutputRoot)\publish\$(MSBuildProjectName)</PublishDir>
+	   <IsPublishable Condition="'$(IsPublishable)' == '' ">false</IsPublishable>
+	</PropertyGroup>
 </Project>
