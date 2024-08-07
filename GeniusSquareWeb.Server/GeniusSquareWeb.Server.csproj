@@ -8,6 +8,9 @@
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
 	<IsPublishable>true</IsPublishable>
+
+	<RootNamespace>GeniusSquareWeb.Server</RootNamespace>
+	<AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
