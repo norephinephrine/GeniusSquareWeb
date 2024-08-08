@@ -54,5 +54,12 @@ export default defineConfig({
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         }
-    }
+    },
+    test: {
+        // enable jest-like global test APIs
+        globals: true,
+        // simulate DOM with happy-dom
+        // (requires installing happy-dom as a peer dependency)
+        environment: 'happy-dom'
+      }
 })
