@@ -18,9 +18,9 @@
         public GameBoardField[] GetAllDiceSides();
 
         /// <summary>
-        /// Generate dice throw result.
+        /// Generate a result from a dice throw.
         /// </summary>
-        /// <returns>DiceSide.</returns>
+        /// <returns>GameBoardField that the dice roll points to.</returns>
         public GameBoardField GenerateDiceResult();
     }
 }
