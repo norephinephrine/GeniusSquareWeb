@@ -71,7 +71,7 @@
         /// <summary>
         /// Get all default dices.
         /// </summary>
-        public static IEnumerable<RandomDice> GetAllDefaultDices =>
+        public static IEnumerable<RandomDice> GetAllDefaultDices() =>
             new RandomDice[] {Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Dice7};
     }
 }

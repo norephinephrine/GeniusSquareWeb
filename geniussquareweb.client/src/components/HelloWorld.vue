@@ -1,31 +1,15 @@
 <template>
-    <div class="weather-component">
-        <h1>Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-
-        <div v-if="loading" class="loading">
-            Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationvue">https://aka.ms/jspsintegrationvue</a> for more details.
-        </div>
-
-        <div v-if="post" class="content">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="forecast in post" :key="forecast.date">
-                        <td>{{ forecast.date }}</td>
-                        <td>{{ forecast.temperatureC }}</td>
-                        <td>{{ forecast.temperatureF }}</td>
-                        <td>{{ forecast.summary }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div v-if="board" class="grid-container">
+        <div 
+            v-for="row in 6" 
+            :key="row"
+            class="flex">
+            <div 
+                v-for="(cell, y) in board.boardState.slice((row-1)*6,(row-1)*6 + 6)" 
+                :key="y" 
+                :class="`grid-item`">
+                {{ cell }}
+            </div>
         </div>
     </div>
 </template>
@@ -33,23 +17,20 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    type Forecasts = {
-        date: string,
-        temperatureC: string,
-        temperatureF: string,
-        summary: string
-    }[];
+    type GameBoard = {
+        boardState: number[],
+    };
 
     interface Data {
         loading: boolean,
-        post: null | Forecasts
+        board: null | GameBoard
     }
 
     export default defineComponent({
         data(): Data {
             return {
                 loading: false,
-                post: null
+                board: null
             };
         },
         created() {
@@ -62,38 +43,46 @@
             '$route': 'fetchData'
         },
         methods: {
-            fetchData(): void {
-                this.post = null;
+            fetchData() {
+                this.board = null;
                 this.loading = true;
 
-                fetch('weatherforecast')
-                    .then(r => r.json())
-                    .then(json => {
-                        this.post = json as Forecasts;
+                fetch('boardGame')
+                    .then(async response => {
+                        
+                        if (!response.ok)
+                        {
+                            throw new Error(response.statusText)
+                        }
+
+                        const data:number[] = await response.json();
+                        let boardGame: GameBoard = {
+                            boardState : data
+                        };
+
+                        this.board = boardGame;
                         this.loading = false;
                         return;
-                    });
+                    })
             }
         },
     });
 </script>
 
 <style scoped>
-th {
-    font-weight: bold;
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+  grid-template-columns: repeat(6, 1fr);
 }
 
-th, td {
-    padding-left: .5rem;
-    padding-right: .5rem;
-}
-
-.weather-component {
-    text-align: center;
-}
-
-table {
-    margin-left: auto;
-    margin-right: auto;
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
 }
 </style>
