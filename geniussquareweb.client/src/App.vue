@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import GridBoard from './components/GridBoard.vue';
 </script>
 
 <template>
     <main class="wrapper">
-        <HelloWorld/>
+        <GridBoard/>
     </main>
 </template>
 
