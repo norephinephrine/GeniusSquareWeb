@@ -1,13 +1,13 @@
 <template>
-    <div v-if="board" class="grid-container">
+    <div v-if="board" class="container">
         <div 
             v-for="(row, rowIndex) in board.boardState"
             :key="rowIndex"
-            class="flex">
+            class="row">
             <div 
                 v-for="(cell, columnIndex) in row" 
                 :key="columnIndex" 
-                :class="`grid-item`"
+                :class="`cell`"
                 @dragenter="(event:any) => dragEnter(event)"
                 @dragover="(event:any) => dragOver(event)"
                 @drop="(event:any) => drop(event, rowIndex, columnIndex)">
@@ -85,19 +85,17 @@
 </script>
 
 <style scoped>
-.grid-container {
-    display: grid;
-    place-items: center;
-    grid-template-columns: auto auto auto auto auto auto;
-    background-color: #2196F3;
-    padding: 10px;
+.container{
+    display: inline-block;
 }
 
-.grid-item {
+.row {
+  display: flex;
+}
+
+.cell {
+    padding: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    font-size: 30px;
-    text-align: center;
 }
 </style>
