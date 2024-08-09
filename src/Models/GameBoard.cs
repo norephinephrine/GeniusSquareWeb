@@ -11,19 +11,22 @@
         /// <summary>
         /// Actual board.
         /// </summary>
-        private int[] board = new int[RowCount * ColumnCount];
+        private int[,] board = new int[RowCount, ColumnCount];
 
         // Get copy of the current game board.
-        public int[] Board => (int[])board.Clone();
+        public int[,] Board => (int[,])board.Clone();
 
         /// <summary>
         /// Ctor.
         /// </summary>
         public GameBoard()
         {
-            foreach (int i in board)
+            foreach (int row in board)
             {
-                board[i] = 0;
+                foreach(int column in board)
+                {
+                    board[row, column] = 0;
+                }
             }
         }
 
@@ -36,7 +39,10 @@
         /// <exception cref="ArgumentException">Invalid index value.</exception>
         public void SetGameBoardField(GameBoardField field, int newValue)
         {
-            board[(int)field] = newValue;
+            int row = (int)field / RowCount;
+            int column = (int)field % RowCount;
+
+            board[row, column] = newValue;
         }
 
         /// <summary>
@@ -59,7 +65,7 @@
                 throw new ArgumentException($"Invalid value for row index {y}");
             }
 
-            board[x * RowCount + y] = newValue;
+            board[x , y] = newValue;
         }
     }
 }

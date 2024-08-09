@@ -1,14 +1,17 @@
 <template>
     <div v-if="board" class="grid-container">
         <div 
-            v-for="row in 6" 
-            :key="row"
+            v-for="(row, rowIndex) in board.boardState"
+            :key="rowIndex"
             class="flex">
             <div 
-                v-for="(cell, y) in board.boardState.slice((row-1)*6,(row-1)*6 + 6)" 
-                :key="y" 
-                :class="`grid-item`">
-                {{ cell }}
+                v-for="(cell, columnIndex) in row" 
+                :key="columnIndex" 
+                :class="`grid-item`"
+                @dragenter="(event:any) => dragEnter(event)"
+                @dragover="(event:any) => dragOver(event)"
+                @drop="(event:any) => drop(event, rowIndex, columnIndex)">
+                {{  }}
             </div>
         </div>
     </div>
@@ -18,7 +21,7 @@
     import { defineComponent } from 'vue';
 
     type GameBoard = {
-        boardState: number[],
+        boardState: number[][],
     };
 
     interface Data {
@@ -55,34 +58,46 @@
                             throw new Error(response.statusText)
                         }
 
-                        const data:number[] = await response.json();
+                        const data:number[][] = await response.json();
                         let boardGame: GameBoard = {
                             boardState : data
                         };
+
+                        console.log(data)
 
                         this.board = boardGame;
                         this.loading = false;
                         return;
                     })
-            }
+            },
+            dragEnter(ev:any) {
+                ev.preventDefault();
+            },
+            dragOver(ev:any) {
+                ev.preventDefault();
+            },
+            drop(ev:any, rowIndex: number, columnIndex: number) {
+                ev.preventDefault();
+                console.log("Row index:" + rowIndex+", Column index" + columnIndex)
+            }   
         },
     });
 </script>
 
 <style scoped>
 .grid-container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-  padding: 10px;
-  grid-template-columns: repeat(6, 1fr);
+    display: grid;
+    place-items: center;
+    grid-template-columns: auto auto auto auto auto auto;
+    background-color: #2196F3;
+    padding: 10px;
 }
 
 .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
 }
 </style>
