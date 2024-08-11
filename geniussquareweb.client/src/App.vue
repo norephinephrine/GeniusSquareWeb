@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import GameBoard from './components/GameBoard.vue';
-import GeniusSquareFigures from './components/GeniusSquareFigures.vue';
-import GeniusSquareFigures1 from './components/GeniusSquareFigures1.vue';
+import GameManager from './components/GameManager.vue';
 </script>
 
 <template>
-    <main class="wrapper">
-        <GameBoard/>
-        <hr/>
-        <GeniusSquareFigures/>
-        <hr/>
-        <GeniusSquareFigures1/>
+    <main>
+        <GameManager/>
     </main>
 </template>
 

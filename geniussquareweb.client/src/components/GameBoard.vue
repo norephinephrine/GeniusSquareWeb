@@ -1,17 +1,16 @@
 <template>
-    <div v-if="board" class="container">
-        <div 
-            v-for="(row, rowIndex) in board.boardState"
+    <div class="container">
+        <div v-for="(row, rowIndex) in boardStates"
             :key="rowIndex"
             class="row">
-            <div 
-                v-for="(cell, columnIndex) in row" 
+            <div v-for="(cell, columnIndex) in row" 
                 :key="columnIndex" 
                 :class="`cell`"
+                :style="{ backgroundColor: cell.color }"
                 @dragenter="(event:any) => dragEnter(event)"
                 @dragover="(event:any) => dragOver(event)"
                 @drop="(event:any) => drop(event, rowIndex, columnIndex)">
-                {{  }}
+                <div v-if="cell.value === -1" class="circle"></div>
             </div>
         </div>
     </div>
@@ -19,57 +18,13 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-
-    type GameBoard = {
-        boardState: number[][],
-    };
-
-    interface Data {
-        loading: boolean,
-        board: null | GameBoard
-    }
+    import type { Cell, FigureDataTransfer } from './BoardFigures/FigureTypes';
 
     export default defineComponent({
-        data(): Data {
-            return {
-                loading: false,
-                board: null
-            };
-        },
-        created() {
-            // fetch the data when the view is created and the data is
-            // already being observed
-            this.fetchData();
-        },
-        watch: {
-            // call again the method if the route changes
-            '$route': 'fetchData'
+        props: {
+            boardStates: Array<Array<Cell>>
         },
         methods: {
-            fetchData() {
-                this.board = null;
-                this.loading = true;
-
-                fetch('boardGame')
-                    .then(async response => {
-                        
-                        if (!response.ok)
-                        {
-                            throw new Error(response.statusText)
-                        }
-
-                        const data:number[][] = await response.json();
-                        let boardGame: GameBoard = {
-                            boardState : data
-                        };
-
-                        console.log(data)
-
-                        this.board = boardGame;
-                        this.loading = false;
-                        return;
-                    })
-            },
             dragEnter(ev:any) {
                 ev.preventDefault();
             },
@@ -77,9 +32,15 @@
                 ev.preventDefault();
             },
             drop(ev:any, rowIndex: number, columnIndex: number) {
+                if (this.boardStates == null || ev.dataTransfer?.getData("figureData") === "")
+                {
+                    return
+                }
+
                 ev.preventDefault();
-                console.log("Row index:" + rowIndex+", Column index" + columnIndex)
-            }   
+                let data:FigureDataTransfer = JSON.parse(ev.dataTransfer?.getData("figureData"));
+                this.$emit("trySetFigureOnBoard", rowIndex, columnIndex, data);
+            }
         },
     });
 </script>
@@ -94,8 +55,25 @@
 }
 
 .cell {
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
+    width: 40px;  /* Set a fixed width */
+    height: 40px; /* Set a fixed height */
     border: 1px solid rgba(0, 0, 0, 0.8);
+    position: relative; /* Positioning for circle */
 }
+
+.circle {
+    width: 30px;
+    height: 30px;
+    background-color: grey;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cell1 {
+    background-color: red;
+}
+
 </style>
