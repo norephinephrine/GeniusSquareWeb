@@ -61,7 +61,7 @@
 
         public static RandomDice Dice7 =
             new RandomDice([
-                GameBoardField.E1,
+                GameBoardField.F1,
                 GameBoardField.A6,
                 GameBoardField.F1,
                 GameBoardField.A6,
