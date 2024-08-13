@@ -1,6 +1,6 @@
 <template>
   <div v-if="figure.placedCellIndexes === null"
-    :id="figureId" class="figure-template"
+    :id="figureId as string" class="figure-template"
     draggable='true'
     @dragstart="dragStart"
     @keyup="transformFiguretOnKeyPress"

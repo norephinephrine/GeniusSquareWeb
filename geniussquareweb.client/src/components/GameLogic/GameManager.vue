@@ -7,10 +7,10 @@
         />  
 
         </div>
-        <div style="width:10%; float:right;">
+        <div style="width:10%; float:right;" class="grid-container" tabindex="-1">
             <div  v-for="(figure, figureKey) in figures"
-            :key="figureKey">
-
+            :key="figureKey"
+            class="grid-item">
             <FigureTemplate 
             :figure="figure"
             :figureId="figureKey"
@@ -18,29 +18,32 @@
             @reset-figure="resetFigure"/>
             </div>
         </div>
-        <div 
-            ref="win-modal"
-            class="modal"
-            @click="closeWinModal"
-        >
+    </div>
+    <div 
+        ref="win-modal"
+        class="modal">
 
-            <div class="modal-content">
-            <h1  
-                style="background-color: green; color: white;"
-                >YOU WON</h1>
+        <div class="modal-content">
+            <span class="close" @click="closeWinModal">&times;</span>
+            <h1 v-if="loading == false"  style="background-color: green; color: white;">
+                YOU WON
+            </h1>
+            <h1 v-else  style="background-color: blue; color: white;" >
+                Waiting for server...
+            </h1>
         </div>
-</div>
     </div>
 </template>
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-    import type { FigureDataTransfer, Figure, Cell } from './BoardFigures/FigureTypes';
+    import type { FigureDataTransfer, Figure, Cell } from './FigureTypes';
     import GameBoard from './GameBoard.vue';
     import FigureTemplate from './BoardFigures/FigureTemplate.vue';
-
+    import * as signalR from "@microsoft/signalr";
 
     interface Data {
+        connection: signalR.HubConnection | null,
         loading: boolean;
         board: null | Cell[][];
         placedFigureCount: number
@@ -57,6 +60,7 @@
         },
         data(): Data {
             return {
+                connection: null,
                 loading: false,
                 board: null,
                 placedFigureCount : 0,
@@ -151,6 +155,14 @@
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
+            this.connection = new signalR.HubConnectionBuilder().withUrl("/gameHub")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            // TODO CHANGE
+            this.connection.on("ReceiveMessage", function (user, message) {
+                console.log(user, message);
+            });
             this.fetchData();
         },
         watch: {
@@ -162,7 +174,7 @@
                 this.board = null;
                 this.loading = true;
 
-                fetch('boardGame')
+                fetch('boardGame/initialBoard')
                     .then(async response => {
                         
                         if (!response.ok)
@@ -186,7 +198,7 @@
                     }))
                 );
             },
-            selectedFigure(id: string)
+            async selectedFigure(id: string)
             {
                 for (const key in this.figures) {
                     if (key == id)
@@ -250,11 +262,26 @@
                     }
                 }
 
-                console.log(this.board);
-
                 if (this.isGameWon())
                 {
+                    this.loading = true;
                     this.$refs["win-modal"].style.display = 'block';
+
+                    // TODO CHANGE
+                    fetch('boardGame/validateGameWin')
+                    .then(async response => {
+                        
+                        await response;
+                        if (!response.ok)
+                        {
+                            throw new Error(response.statusText)
+                        }
+                        else
+                        {
+                            this.$refs["win-modal"].style.display = 'block';
+                        }
+                        this.loading = false;
+                    })
                 };
 
             },
@@ -303,7 +330,6 @@
             },
             closeWinModal(ev: Event)
             {
-                console.log(this.$refs["win-modal"]);
                 this.$refs["win-modal"].style.display = 'none';
             }
         },
@@ -311,15 +337,6 @@
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
 .modal {
   display: none;
   position: fixed;

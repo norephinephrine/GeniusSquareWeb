@@ -47,7 +47,12 @@ export default defineConfig({
             '^/boardGame': {
                 target,
                 secure: false
-            }
+            },
+            '^/gameHub': {
+                target,
+                ws: true,
+                secure: false
+            },
         },
         port: 5173,
         https: {
