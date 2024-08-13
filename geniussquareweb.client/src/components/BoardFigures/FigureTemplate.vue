@@ -4,8 +4,7 @@
     draggable='true'
     @dragstart="dragStart"
     @keyup="transformFiguretOnKeyPress"
-     tabindex="-1"
-    >
+    tabindex="-1">
       <div
         v-for="(row, rowIndex) in figure.cellMatrix"
         :key="rowIndex"sdfsdf

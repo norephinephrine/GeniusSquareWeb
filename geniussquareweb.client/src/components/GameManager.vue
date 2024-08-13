@@ -321,17 +321,17 @@ header {
 }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  display: none;
+  position: fixed;
+  z-index: 5;
+  padding-top: 100px;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4);
 }
 
 /* Modal Content */
@@ -344,5 +344,28 @@ header {
   text-align: center;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
 
+.grid-item {
+  z-index: 1;
+  width: 200px;
+  height: 200px;
+}
+
+.close {
+  color: red;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: darkred;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>

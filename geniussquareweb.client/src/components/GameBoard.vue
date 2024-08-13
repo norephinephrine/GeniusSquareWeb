@@ -40,7 +40,7 @@
                 ev.preventDefault();
                 let data:FigureDataTransfer = JSON.parse(ev.dataTransfer?.getData("figureData"));
                 this.$emit("trySetFigureOnBoard", rowIndex, columnIndex, data);
-            }
+            },
         },
     });
 </script>
