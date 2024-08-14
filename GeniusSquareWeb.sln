@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7F318E97-4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{86111608-9C61-4B49-8A44-1D9892FF6ECB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "src\Models\Models.csproj", "{F6E31B59-8FE9-4649-BB2F-186B00A3836F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameElements", "src\Models\GameElements.csproj", "{F6E31B59-8FE9-4649-BB2F-186B00A3836F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
