@@ -18,7 +18,7 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-    import type { Cell, FigureDataTransfer } from './FigureTypes';
+    import type { Cell, FigureDataTransfer } from './GameTypes';
 
     export default defineComponent({
         props: {

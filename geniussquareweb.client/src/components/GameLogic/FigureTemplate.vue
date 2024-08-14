@@ -26,7 +26,7 @@
 
 <script  lang="ts">
 import type { PropType } from 'vue';
-import type { FigureDataTransfer, Figure } from './FigureTypes';
+import type { FigureDataTransfer, Figure } from './GameTypes';
 import { defineComponent } from 'vue'
 import { flipOverXAxis, flipOverYAxis, rotateLeft, rotateRight } from './FigureTransformations';
 import { enableDragDropTouch } from "./drag-drop-touch.esm.min.js";
@@ -56,7 +56,6 @@ export default defineComponent({
     {
       this.selectedCellRowIndex = rowIndex;
       this.selectedCellColumnIndex = columnIndex;
-      console.log(rowIndex+ " ", columnIndex)
       this.$emit('selectedFigure',this.figureId)
     },
     dragStart(event: DragEvent ) {      

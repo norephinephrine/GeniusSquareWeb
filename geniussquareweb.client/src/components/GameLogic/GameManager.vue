@@ -3,11 +3,18 @@
         <div style="width:400px; float:left;">
         <GameBoard v-if="board"
         :boardStates="board"
-        @try-set-figure-on-board="trySetFigureOnBoard"
-        />  
+        @try-set-figure-on-board="trySetFigureOnBoard"/>  
 
         </div>
         <div style="width:10%; float:right;" class="grid-container" tabindex="-1">
+            <div class="gridItem" style="padding-bottom: 20px;">
+                <span>E: rotate figure right 90&deg</span>
+                <span>Q: rotate figure left 90&deg</span>
+                <span>D:  flip figure over X axis</span>
+                <span>F:  flip figure over Y axis</span>
+            </div>
+            <div class="gridItem"></div>
+            <div class="gridItem"></div>
             <div  v-for="(figure, figureKey) in figures"
             :key="figureKey"
             class="grid-item">
@@ -19,32 +26,17 @@
             </div>
         </div>
     </div>
-    <div 
-        ref="win-modal"
-        class="modal">
-
-        <div class="modal-content">
-            <span class="close" @click="closeWinModal">&times;</span>
-            <h1 v-if="loading == false"  style="background-color: green; color: white;">
-                YOU WON
-            </h1>
-            <h1 v-else  style="background-color: blue; color: white;" >
-                Waiting for server...
-            </h1>
-        </div>
-    </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
-    import type { FigureDataTransfer, Figure, Cell } from './FigureTypes';
+    import { defineComponent, type PropType } from 'vue';
+    import type { FigureDataTransfer, Figure, Cell, GameData } from './GameTypes';
     import GameBoard from './GameBoard.vue';
-    import FigureTemplate from './BoardFigures/FigureTemplate.vue';
+    import FigureTemplate from './FigureTemplate.vue';
     import * as signalR from "@microsoft/signalr";
 
     interface Data {
         connection: signalR.HubConnection | null,
-        loading: boolean;
         board: null | Cell[][];
         placedFigureCount: number
         figures: 
@@ -58,10 +50,16 @@
             GameBoard,
             FigureTemplate
         },
+        emits: ["winGame"],
+        props: {
+            currentGame: {
+                type: Object as PropType<GameData>,
+                required: true,
+            },
+        },
         data(): Data {
             return {
                 connection: null,
-                loading: false,
                 board: null,
                 placedFigureCount : 0,
                 figures: {
@@ -153,49 +151,15 @@
             };
         },
         created() {
-            // fetch the data when the view is created and the data is
-            // already being observed
-            this.connection = new signalR.HubConnectionBuilder().withUrl("/gameHub")
-                .configureLogging(signalR.LogLevel.Information)
-                .build();
-
-            // TODO CHANGE
-            this.connection.on("ReceiveMessage", function (user, message) {
-                console.log(user, message);
-            });
-            this.fetchData();
-        },
-        watch: {
-            // call again the method if the route changes
-            '$route': 'fetchData'
+            this.board = this.createCellMatrix(this.currentGame.board);
         },
         methods: {
-            fetchData() {
-                this.board = null;
-                this.loading = true;
-
-                fetch('boardGame/initialBoard')
-                    .then(async response => {
-                        
-                        if (!response.ok)
-                        {
-                            throw new Error(response.statusText)
-                        }
-
-                        let data:number[][] = await response.json();
-
-                        this.board = this.createCellMatrix(data);
-                        this.loading = false;
-                        return;
-                    })
-            },
             createCellMatrix(numbers: number[][]): Cell[][] {
                 return numbers.map(row => 
                     row.map(value => ({
                     figureId: "",
                     value: value,
-                    color: "white",
-                    }))
+                    color: "white"}))
                 );
             },
             async selectedFigure(id: string)
@@ -264,25 +228,8 @@
 
                 if (this.isGameWon())
                 {
-                    this.loading = true;
-                    this.$refs["win-modal"].style.display = 'block';
-
-                    // TODO CHANGE
-                    fetch('boardGame/validateGameWin')
-                    .then(async response => {
-                        
-                        await response;
-                        if (!response.ok)
-                        {
-                            throw new Error(response.statusText)
-                        }
-                        else
-                        {
-                            this.$refs["win-modal"].style.display = 'block';
-                        }
-                        this.loading = false;
-                    })
-                };
+                    this.$emit('winGame')
+                }
 
             },
             isValidPlacement(
@@ -328,39 +275,11 @@
 
                 return true;
             },
-            closeWinModal(ev: Event)
-            {
-                this.$refs["win-modal"].style.display = 'none';
-            }
         },
     });
 </script>
 
 <style scoped>
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 5;
-  padding-top: 100px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4);
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: lightgreen;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 20%;
-  text-align: center;
-}
-
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -372,17 +291,8 @@
   height: 200px;
 }
 
-.close {
-  color: red;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: darkred;
-  text-decoration: none;
-  cursor: pointer;
+span {
+  font-weight: 800;
+  display: block;
 }
 </style>

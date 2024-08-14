@@ -1,4 +1,6 @@
-﻿namespace GeniusSquareWeb.Server
+﻿using GeniusSquareWeb.Models;
+
+namespace GeniusSquareWeb.Server
 {
     /// <summary>
     /// Class that bootstraps the game server.
@@ -16,6 +18,12 @@
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // add SignalR
+            builder.Services.AddSignalR();
+
+            RegisterDefaultDices(builder.Services);
+            builder.Services.AddSingleton<IGameManager, GameManager>();
 
             var app = builder.Build();
 
@@ -37,7 +45,18 @@
 
             app.MapFallbackToFile("/index.html");
 
+            app.MapHub<GameHub>("/gameHub");
+
             return app;
+        }
+
+        private static void RegisterDefaultDices(
+            IServiceCollection serviceCollection)
+        {
+            foreach (IDice dice in DefaultDices.GetAllDefaultDices())
+            {
+                serviceCollection.AddSingleton<IDice>(dice);
+            }
         }
     }
 }

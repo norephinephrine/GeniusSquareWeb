@@ -1,14 +1,16 @@
 ﻿using GeniusSquareWeb.Models;
+using System.Collections.Concurrent;
 
 namespace GeniusSquareWeb.Server
 {
     /// <summary>
     /// Class that manages game instances of Genius Square.
     /// </summary>
-    public class GameManager
+    public class GameManager: IGameManager
     {
 
         private IEnumerable<IDice> dices;
+        private static readonly ConcurrentDictionary<Guid, GameInstance> gameInstances = new();
 
         /// <summary>
         /// Ctor.
@@ -18,8 +20,10 @@ namespace GeniusSquareWeb.Server
             this.dices = dices;
         }
 
-        public GameBoard CreateInitialBoard()
+        /// <inheritdoc/>
+        public GameInstance? TryCreateGame()
         {
+            Guid gameId = Guid.NewGuid();
             GameBoard board = new GameBoard();
 
             foreach (IDice dice in dices)
@@ -28,7 +32,38 @@ namespace GeniusSquareWeb.Server
                 board.SetGameBoardField(field, -1);
             }
 
-            return board;
+            GameInstance gameInstance = new(gameId, board);
+
+            if (!gameInstances.TryAdd(gameId, gameInstance))
+            {
+                return null;
+            }
+
+            return gameInstance;
+        }
+
+        /// <inheritdoc/>
+        public GameInstance? TryGetExistingGame(Guid gameId)
+        {
+            GameInstance gameInstance;
+            if (!gameInstances.TryGetValue(gameId, out gameInstance))
+            {
+                return null;
+            }
+
+            return gameInstance;
+        }
+
+        /// <inheritdoc/>
+        public bool TryDeleteGame(Guid gameId)
+        {
+            return gameInstances.TryRemove(gameId, out GameInstance gameBoard);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IGameInstance> GetAllGameInstances()
+        {
+            return gameInstances.Values;
         }
     }
 }

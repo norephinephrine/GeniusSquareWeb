@@ -1,4 +1,4 @@
-export type {FigureDataTransfer, Figure, Cell}
+export type {FigureDataTransfer, Figure, Cell, GameData}
 
 type FigureDataTransfer = {
     figureId: string,
@@ -19,3 +19,9 @@ type Cell = {
     color: string
     value: number,
 };
+
+type GameData =
+{
+    gameGuid: string,
+    board: Array<Array<number>>
+}
