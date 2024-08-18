@@ -20,6 +20,11 @@
         }
 
         /// <summary>
+        /// Gets game board.
+        /// </summary>
+        public GameBoard Board => this.board;
+
+        /// <summary>
         /// Get game id.
         /// </summary>
         public Guid GameId { get; private set; }
