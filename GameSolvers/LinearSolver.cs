@@ -2,21 +2,13 @@
 
 namespace GameSolvers
 {
-    public class DfsSolver : ISolver
+    /// <summary>
+    /// Transform game board state to a set of linear equations that can be solved
+    /// using .
+    /// </summary>
+    public class LinearSolver : ISolver
     {
-        private IEnumerable<int[,]>[] figureList = new IEnumerable<int[,]>[]
-        {
-            DefaultFigures.Monoid.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.Domino.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TrominoI.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TrominoL.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoI.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoT.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoL.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoS.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoSquare.GetFigureOrientationsWithValueMultiplier(),
-        };
-
+        private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureList;
 
         /// <inheritdoc/>
         public int[,] Solve(GameBoard board)
@@ -27,7 +19,7 @@ namespace GameSolvers
             bool result = this.SolverHelper(iteratingBoard, figureIndex);
             if (result != true)
             {
-                throw new Exception("Dfs solver should have solved the game. Instead it failed");
+                throw new Exception("Backtracking solver should have solved the game. Instead it failed");
             }
 
             return iteratingBoard;
@@ -35,7 +27,7 @@ namespace GameSolvers
 
         private bool SolverHelper(int[,] board, int figureIndex)
         {
-            IEnumerable<int[,]> listFigureOrientation = figureList[figureIndex];
+            IEnumerable<int[,]> figureOrientationList = figureList[figureIndex];
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
 
@@ -43,7 +35,7 @@ namespace GameSolvers
             {
                 for (int startingColumn = 0; startingColumn < columnCount; startingColumn++)
                 {
-                    foreach (int[,] figureOrientation in listFigureOrientation)
+                    foreach (int[,] figureOrientation in figureOrientationList)
                     {
                         int figureRowCount = figureOrientation.GetLength(0);
                         int figureColumnCount = figureOrientation.GetLength(1);

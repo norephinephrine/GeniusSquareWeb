@@ -1,4 +1,5 @@
 using GameSolvers;
+using GameSolversTests;
 using GeniusSquareWeb.Models;
 using GeniusSquareWeb.Server;
 
@@ -8,38 +9,26 @@ namespace DfsSolverTests
     /// RandomDice tests.
     /// </summary>
     [TestClass]
-    public class DfsSolverTests
+    public class BacktrackingSolverTests
     {
+
         /// <summary>
-        /// Should generate different random dice results.
+        /// Validate backtracking solver.
         /// </summary>
         [TestMethod]
-        public void ShouldGenerateDifferentDiceResults()
+        public void ValidateSolver()
         {
             // get
             GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            DfsSolver dfsSolver = new DfsSolver();
+            BacktrackingSolver dfsSolver = new BacktrackingSolver();
 
             // then
             int[,] solvedBoard = dfsSolver.Solve(gameBoard);
 
-            Print2DArray(solvedBoard);
-
-        }
-
-        private static void Print2DArray(int[,] matrix)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    Console.Write($"{matrix[i,j],3}");
-                }
-                Console.WriteLine();
-            }
+            Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);
         }
     }
 }

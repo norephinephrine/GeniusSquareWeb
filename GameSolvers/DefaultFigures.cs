@@ -9,6 +9,19 @@ namespace GameSolvers
 {
     public static class DefaultFigures
     {
+        public static IEnumerable<int[,]>[] FigureList => new IEnumerable<int[,]>[]
+        {
+            DefaultFigures.Monoid.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.Domino.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TrominoI.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TrominoL.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TetrominoI.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TetrominoT.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TetrominoL.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TetrominoS.GetFigureOrientationsWithValueMultiplier(),
+            DefaultFigures.TetrominoSquare.GetFigureOrientationsWithValueMultiplier(),
+        };
+
         public readonly static Figure Monoid =
             new Figure(
                 figureShape:
