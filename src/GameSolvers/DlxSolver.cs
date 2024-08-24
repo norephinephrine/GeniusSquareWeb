@@ -5,26 +5,24 @@ namespace GameSolvers
     /// <summary>
     /// Dancing link solver utilising algorithm X.
     /// </summary>
-    public class DlxSolver
+    public class DlxSolver : ISolver
     {
         private const int FigureCount = 9;
         private Figure[] figureList = DefaultFigures.FigureList;
 
-        private GameBoard gameBoard;
-
         private Node root;
         private Node[] placedFigure = new Node[FigureCount];
-
-
-
-        public DlxSolver(Node root, GameBoard gameBoard)
+        public DlxSolver(Node root)
         {
-            this.gameBoard = gameBoard;
-            int[,] board = gameBoard.Board;
+            this.root = root;
+        }
 
+        public int[,] Solve(int[,] board)
+        {
             // reduce dancing links
             Node current = root.Right;
-            for(int i = 0; i< figureList.Length; i ++)
+            List<Node> nodes = new();
+            for (int i = 0; i < figureList.Length; i++)
             {
                 current = current.Right;
             }
@@ -36,33 +34,44 @@ namespace GameSolvers
                     if (board[i, j] == -1)
                     {
                         CoverNode(current);
+                        nodes.Insert(0, current);
                     }
 
                     current = current.Right;
                 }
             }
 
-            this.root = root;
-
-        }
-
-        public int[,] Solve()
-        {
-            int[,] board = gameBoard.Board;
-
-            if (!DlxIteration(this.root, 0))
+            if (!DlxIteration(0))
             {
                 throw new Exception("Dlx solver should have solved the game. Instead it failed");
 
             }
 
             PlaceFiguresOnBoard(board, this.placedFigure);
+
+            for (int i = FigureCount -1; i>=0; i --)
+            {
+                current = placedFigure[i];
+
+                do
+                {
+                    current = current.Left;
+                    this.UncoverNode(current.ColumnHead);
+                }
+                while (current != placedFigure[i]);
+            }
+
+            foreach (Node node in nodes)
+            {
+                this.UncoverNode(node.ColumnHead);
+            }
+
             return board;
         }
 
-        private bool DlxIteration(Node root, int k)
+        private bool DlxIteration(int k)
         {
-            if (root.Right == root)
+            if (this.root.Right == root)
             {
                 return true;
             }
@@ -86,7 +95,7 @@ namespace GameSolvers
                     j = j.Right;
                 }
 
-                if(this.DlxIteration(root, k + 1))
+                if(this.DlxIteration(k + 1))
                 {
                     return true;
                 }
@@ -169,11 +178,7 @@ namespace GameSolvers
                 j = i.Left;
                 while (j != i)
                 {
-                    try
-                    {
-                        j.ColumnHead.Size++;
-                    }
-                    catch(Exception) { }
+                    j.ColumnHead.Size++;
 
                     j.Down.Up = j;
                     j.Up.Down = j;

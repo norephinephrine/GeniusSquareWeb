@@ -7,37 +7,32 @@ namespace GameSolvers
         private const int FigureCount = 9;
 
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
-        private bool[] isFigurePlaced = new bool[FigureCount];
-
-        public DeBruijnSolver()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                isFigurePlaced[i] = false;
-            }
-        }
 
         /// <inheritdoc/>
-        public int[,] Solve(GameBoard board)
+        public int[,] Solve(int[,] board)
         {
-            int[,] iteratingBoard = board.Board;
-            int figureIndex = 0;
+            int[,] iteratingBoard = board;
+            bool[] isFigurePlaced = new bool[FigureCount];
 
-            bool result = this.SolverHelper(iteratingBoard);
+
+            bool result = this.SolverHelper(iteratingBoard, isFigurePlaced);
             if (result != true)
             {
-                throw new Exception("Backtracking solver should have solved the game. Instead it failed");
+
+                throw new Exception("De Bruijn solver should have solved the game. Instead it failed");
             }
 
             return iteratingBoard;
         }
 
-        private bool SolverHelper(int[,] board)
+        private bool SolverHelper(
+            int[,] board,
+            bool[] isFigurePlaced)
         {
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
 
-            Tuple<int, int> holeIndex = this.FindNextEmptyHole(board);
+            Tuple<int, int>? holeIndex = this.FindNextEmptyHole(board);
             if (holeIndex == null)
             {
                 return true;
@@ -45,7 +40,7 @@ namespace GameSolvers
 
             for (int figureIndex = 0; figureIndex < FigureCount; figureIndex ++)
             {
-                if (this.isFigurePlaced[figureIndex])
+                if (isFigurePlaced[figureIndex])
                 {
                     continue;
                 }
@@ -116,12 +111,12 @@ namespace GameSolvers
                     }
 
                     // next figure placement start
-                    this.isFigurePlaced[figureIndex] = true;
-                    if (this.SolverHelper(board))
+                    isFigurePlaced[figureIndex] = true;
+                    if (this.SolverHelper(board, isFigurePlaced))
                     {
                         return true;
                     }
-                    this.isFigurePlaced[figureIndex] = false;
+                    isFigurePlaced[figureIndex] = false;
 
                     // remove figure
                     for (int i = 0; i < figureRowCount; i++)
@@ -144,7 +139,7 @@ namespace GameSolvers
             return false;
         }
 
-        private Tuple<int, int> FindNextEmptyHole(int[,] board)
+        private Tuple<int, int>? FindNextEmptyHole(int[,] board)
         {
             for (int j = 0; j < board.GetLength(1); j++)
             {

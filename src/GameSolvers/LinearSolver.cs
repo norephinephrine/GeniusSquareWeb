@@ -11,9 +11,9 @@ namespace GameSolvers
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
-        public int[,] Solve(GameBoard board)
+        public int[,] Solve(int[,] board)
         {
-            int[,] iteratingBoard = board.Board;
+            int[,] iteratingBoard = board;
             int figureIndex = 0;
 
             bool result = this.SolverHelper(iteratingBoard, figureIndex);

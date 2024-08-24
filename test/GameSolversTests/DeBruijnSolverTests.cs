@@ -3,7 +3,7 @@ using GameSolversTests;
 using GeniusSquareWeb.Models;
 using GeniusSquareWeb.Server;
 
-namespace DfsSolverTests
+namespace GameSolversTests
 {
     /// <summary>
     /// DeBrujin algorithm tests.
@@ -23,13 +23,32 @@ namespace DfsSolverTests
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            DeBruijnSolver dfsSolver = new DeBruijnSolver();
+            DeBruijnSolver deBruijnSolver = new DeBruijnSolver();
 
+            int[,] board = gameBoard.Board;
             // when
-            int[,] solvedBoard = dfsSolver.Solve(gameBoard);
+            int[,] solvedBoard = deBruijnSolver.Solve(board);
 
             // then
             Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);
+        }
+
+        /// <summary>
+        /// Solver should be able to be used to solve 2 different problems.
+        /// </summary>
+        [TestMethod]
+        public void ShouldRunSolverTwiceSuccessfully()
+        {
+            // given
+            GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
+            GameInstance gameInstance1 = gameManager.TryCreateGame();
+            GameInstance gameInstance2 = gameManager.TryCreateGame();
+
+            DeBruijnSolver solver = new DeBruijnSolver();
+
+            // when & then
+            _ = solver.Solve(gameInstance1.Board.Board);
+            _ = solver.Solve(gameInstance2.Board.Board);
         }
     }
 }

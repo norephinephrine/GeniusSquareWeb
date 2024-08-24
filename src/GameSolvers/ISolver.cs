@@ -7,6 +7,6 @@ namespace GameSolvers
         /// <summary>
         /// Solve game.
         /// </summary>
-        public int[,] Solve(GameBoard board);
+        public int[,] Solve(int[,] board);
     }
 }
