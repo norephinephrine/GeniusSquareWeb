@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameSolvers\GameSolvers.csproj" />
+    <ProjectReference Include="..\..\src\GameSolvers\GameSolvers.csproj" />
   </ItemGroup>
+
 
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
