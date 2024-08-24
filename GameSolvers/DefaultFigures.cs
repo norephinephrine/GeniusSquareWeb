@@ -9,7 +9,20 @@ namespace GameSolvers
 {
     public static class DefaultFigures
     {
-        public static IEnumerable<int[,]>[] FigureList => new IEnumerable<int[,]>[]
+        public static Figure[] FigureList => new Figure[9]
+        {
+            DefaultFigures.Monoid,
+            DefaultFigures.Domino,
+            DefaultFigures.TrominoI,
+            DefaultFigures.TrominoL,
+            DefaultFigures.TetrominoI,
+            DefaultFigures.TetrominoT,
+            DefaultFigures.TetrominoL,
+            DefaultFigures.TetrominoS,
+            DefaultFigures.TetrominoSquare,
+        };
+
+        public static IEnumerable<int[,]>[] FigureListOrientations => new IEnumerable<int[,]>[]
         {
             DefaultFigures.Monoid.GetFigureOrientationsWithValueMultiplier(),
             DefaultFigures.Domino.GetFigureOrientationsWithValueMultiplier(),
@@ -28,6 +41,7 @@ namespace GameSolvers
                     new int[,] {
                         { 1 }
                     },
+                figureName: nameof(Monoid),
                 figureTransformation: FigureTransformation.NoTransformation);
 
         public static Figure Domino =
@@ -36,6 +50,7 @@ namespace GameSolvers
                     new int[,] {
                         { 1, 1 }
                     },
+                figureName: nameof(Domino),
                 figureTransformation: FigureTransformation.TwoRotations);
 
         public static Figure TrominoL =
@@ -45,6 +60,7 @@ namespace GameSolvers
                         { 1, 1 },
                         { 0, 1 }
                     },
+                figureName: nameof(TrominoL),
                 figureTransformation: FigureTransformation.FourRotations);
 
         public static Figure TrominoI =
@@ -53,6 +69,7 @@ namespace GameSolvers
                     new int[,] {
                         { 1, 1, 1 },
                     },
+                figureName: nameof(TrominoI),
                 figureTransformation: FigureTransformation.TwoRotations);
 
 
@@ -63,6 +80,7 @@ namespace GameSolvers
                         { 1, 1,},
                         { 1, 1,},
                     },
+                figureName: nameof(TetrominoSquare),
                 figureTransformation: FigureTransformation.NoTransformation);
 
         public static Figure TetrominoL =
@@ -72,6 +90,7 @@ namespace GameSolvers
                         { 1, 1, 1},
                         { 0, 0, 1},
                     },
+                figureName: nameof(TetrominoL),
                 figureTransformation: FigureTransformation.FourRotationsAndReflection);
 
 
@@ -82,6 +101,7 @@ namespace GameSolvers
                         { 1, 1, 0},
                         { 0, 1, 1},
                     },
+                figureName: nameof(TetrominoS),
                 figureTransformation: FigureTransformation.TwoRotationsAndReflection);
 
         public static Figure TetrominoT =
@@ -91,6 +111,7 @@ namespace GameSolvers
                         { 1, 1, 1},
                         { 0, 1, 0},
                     },
+                figureName: nameof(TetrominoT),
                 figureTransformation: FigureTransformation.FourRotations);
 
         public static Figure TetrominoI =
@@ -99,6 +120,7 @@ namespace GameSolvers
                     new int[,] {
                         { 1, 1, 1, 1},
                     },
+                figureName: nameof(TetrominoI),
                 figureTransformation: FigureTransformation.TwoRotations);
     }
 }

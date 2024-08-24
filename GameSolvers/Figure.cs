@@ -2,9 +2,9 @@
 {
     public class Figure
     {
-        private static int ValueMultiplier = 0;
+        private static int FigureValue = 0;
 
-        private int valueMultiplier = Interlocked.Increment(ref ValueMultiplier);
+        private int value = Interlocked.Increment(ref FigureValue);
 
         private List<int[,]> figureOrientations;
 
@@ -15,8 +15,10 @@
         /// <param name="figureTransformation">Figure transformation.</param>
         public Figure(
             int[,] figureShape,
+            string figureName,
             FigureTransformation figureTransformation)
         {
+            this.Name = figureName;
             int numberOfRotations = this.GetNumberOfRotations(figureTransformation);
 
             bool shouldFlip =
@@ -46,6 +48,18 @@
                 newFigure = RotateRight(newFigure);
             }
         }
+
+        /// <summary>
+        /// Get all figure orientations.
+        /// </summary>
+        /// <returns></returns>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Get the figure value.
+        /// </summary>
+        /// <returns></returns>
+        public int Value => this.value;
 
         /// <summary>
         /// Get all figure orientations;
@@ -78,7 +92,7 @@
                 {
                     for (int j = 0; j < copyList.GetLength(1); j++)
                     {
-                        copyList[i, j] *= this.valueMultiplier;
+                        copyList[i, j] *= this.value;
                     }
                 }
 

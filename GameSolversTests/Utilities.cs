@@ -4,7 +4,7 @@ namespace GameSolversTests
 {
     public static class Utilities
     {
-        private static IEnumerable<int[,]>[] figureList = DefaultFigures.FigureList;
+        private static IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <summary>
         /// Validate solution.

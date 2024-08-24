@@ -2,15 +2,26 @@
 using GameSolversTests;
 using GeniusSquareWeb.Models;
 using GeniusSquareWeb.Server;
+using Node = GameSolvers.DlxSolver.Node;
 
 namespace DfsSolverTests
 {
     /// <summary>
-    /// DeBrujin algorithm tests.
+    /// Dancing links with Algorithm X solver tests.
     /// </summary>
     [TestClass]
-    public class DeBruijnSolverTests
+    public class DlxSolverTests
     {
+
+        /// <summary>
+        /// Validate Board generation.
+        /// </summary>
+        [TestMethod]
+        public void ValidateBoardGeneration()
+        {
+            // when & then
+            Node root = GeniusSquareDancingLinks.GenerateBoard();
+        }
 
         /// <summary>
         /// Validate De Bruijn solver.
@@ -23,10 +34,11 @@ namespace DfsSolverTests
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            DeBruijnSolver dfsSolver = new DeBruijnSolver();
+            Node root = GeniusSquareDancingLinks.GenerateBoard();
+            DlxSolver dlxSolver = new DlxSolver(root, gameBoard);
 
             // when
-            int[,] solvedBoard = dfsSolver.Solve(gameBoard);
+            int[,] solvedBoard = dlxSolver.Solve();
 
             // then
             Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);

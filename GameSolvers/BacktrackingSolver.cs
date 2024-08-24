@@ -4,7 +4,7 @@ namespace GameSolvers
 {
     public class BacktrackingSolver : ISolver
     {
-        private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureList;
+        private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
         public int[,] Solve(GameBoard board)

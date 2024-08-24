@@ -6,8 +6,8 @@ namespace GameSolvers
     {
         private const int FigureCount = 9;
 
-        private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureList;
-        private bool[] isFigurePlaced = new bool[9];
+        private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
+        private bool[] isFigurePlaced = new bool[FigureCount];
 
         public DeBruijnSolver()
         {

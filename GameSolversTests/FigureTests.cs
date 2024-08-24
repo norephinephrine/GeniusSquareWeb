@@ -24,6 +24,7 @@ namespace GameSolversTests
                     new int[,] {
                         { 1, 1 }
                     },
+                figureName: "test",
                 figureTransformation: FigureTransformation.TwoRotations);
 
             // when and then
@@ -49,6 +50,7 @@ namespace GameSolversTests
                         { 1, 1 },
                         { 1, 0 }
                     },
+                figureName: "test",
                 figureTransformation: FigureTransformation.FourRotations);
 
             // when and then
@@ -74,6 +76,7 @@ namespace GameSolversTests
                         { 1, 1, 0 },
                         { 0, 1, 1 }
                     },
+                figureName: "test",
                 figureTransformation: FigureTransformation.TwoRotationsAndReflection);
 
             // when and then

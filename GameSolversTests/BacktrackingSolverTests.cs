@@ -6,7 +6,7 @@ using GeniusSquareWeb.Server;
 namespace DfsSolverTests
 {
     /// <summary>
-    /// RandomDice tests.
+    /// Backtracking algorithm tests.
     /// </summary>
     [TestClass]
     public class BacktrackingSolverTests
@@ -18,16 +18,17 @@ namespace DfsSolverTests
         [TestMethod]
         public void ValidateSolver()
         {
-            // get
+            // given
             GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            BacktrackingSolver dfsSolver = new BacktrackingSolver();
+            BacktrackingSolver solver = new BacktrackingSolver();
+
+            // when
+            int[,] solvedBoard = solver.Solve(gameBoard);
 
             // then
-            int[,] solvedBoard = dfsSolver.Solve(gameBoard);
-
             Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);
         }
     }
