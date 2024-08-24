@@ -1,4 +1,4 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Enum representing the allowed fields of a game board

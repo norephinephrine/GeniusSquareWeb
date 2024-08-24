@@ -1,14 +1,12 @@
-﻿using GeniusSquareWeb.Models;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 
-namespace GeniusSquareWeb.Server
+namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Class that manages game instances of Genius Square.
     /// </summary>
     public class GameManager: IGameManager
     {
-
         private IEnumerable<IDice> dices;
         private static readonly ConcurrentDictionary<Guid, GameInstance> gameInstances = new();
 

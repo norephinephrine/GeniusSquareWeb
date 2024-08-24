@@ -1,4 +1,4 @@
-﻿using GameSolvers;
+﻿using GeniusSquareWeb.GameSolvers;
 
 namespace GameSolversTests
 {

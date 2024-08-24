@@ -1,6 +1,4 @@
-﻿using GeniusSquareWeb.Models;
-
-namespace GameSolvers
+﻿namespace GeniusSquareWeb.GameSolvers.DeBruijn
 {
     public class DeBruijnSolver : ISolver
     {
@@ -15,7 +13,7 @@ namespace GameSolvers
             bool[] isFigurePlaced = new bool[FigureCount];
 
 
-            bool result = this.SolverHelper(iteratingBoard, isFigurePlaced);
+            bool result = SolverHelper(iteratingBoard, isFigurePlaced);
             if (result != true)
             {
 
@@ -32,13 +30,13 @@ namespace GameSolvers
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
 
-            Tuple<int, int>? holeIndex = this.FindNextEmptyHole(board);
+            Tuple<int, int>? holeIndex = FindNextEmptyHole(board);
             if (holeIndex == null)
             {
                 return true;
             }
 
-            for (int figureIndex = 0; figureIndex < FigureCount; figureIndex ++)
+            for (int figureIndex = 0; figureIndex < FigureCount; figureIndex++)
             {
                 if (isFigurePlaced[figureIndex])
                 {
@@ -61,7 +59,7 @@ namespace GameSolvers
                     int startingColumn = holeIndex.Item2;
 
                     // if starting row is below 0 then figure placement is invalid.
-                    if(startingRow < 0)
+                    if (startingRow < 0)
                     {
                         continue;
                     }
@@ -77,7 +75,7 @@ namespace GameSolvers
 
                             if (figureRowPlacement >= rowCount
                                 || figureColumnPlacement >= columnCount
-                                || (board[figureRowPlacement, figureColumnPlacement] != 0 && figureOrientation[i, j] > 0))
+                                || board[figureRowPlacement, figureColumnPlacement] != 0 && figureOrientation[i, j] > 0)
                             {
                                 isNotValidFigure = true;
                                 break;
@@ -112,7 +110,7 @@ namespace GameSolvers
 
                     // next figure placement start
                     isFigurePlaced[figureIndex] = true;
-                    if (this.SolverHelper(board, isFigurePlaced))
+                    if (SolverHelper(board, isFigurePlaced))
                     {
                         return true;
                     }
@@ -148,8 +146,8 @@ namespace GameSolvers
                     if (board[i, j] == 0)
                     {
                         return Tuple.Create(i, j);
-                    }    
-                }    
+                    }
+                }
             }
 
             return null;

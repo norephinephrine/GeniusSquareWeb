@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\GameElements\GameElements.csproj" />
     <ProjectReference Include="..\..\src\GameSolvers\GameSolvers.csproj" />
   </ItemGroup>
 

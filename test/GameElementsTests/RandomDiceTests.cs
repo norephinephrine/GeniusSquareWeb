@@ -1,6 +1,6 @@
-using GeniusSquareWeb.Models;
+using GeniusSquareWeb.GameElements;
 
-namespace ModelTests
+namespace GameElementsTests
 {
     /// <summary>
     /// RandomDice tests.

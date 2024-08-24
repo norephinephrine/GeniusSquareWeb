@@ -1,8 +1,6 @@
-﻿using GameSolvers;
-using GameSolversTests;
-using GeniusSquareWeb.Models;
-using GeniusSquareWeb.Server;
-using Node = GameSolvers.DlxSolver.Node;
+﻿using GeniusSquareWeb.GameElements;
+using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
+using GeniusSquareWeb.GameSolvers.DancingLinks;
 
 namespace GameSolversTests
 {

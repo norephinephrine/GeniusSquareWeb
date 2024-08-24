@@ -24,6 +24,7 @@
     <ProjectReference Include="..\geniussquareweb.client\geniussquareweb.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\src\GameElements\GameElements.csproj" />
     <ProjectReference Include="..\src\Models\GameElements.csproj" />
   </ItemGroup>
 

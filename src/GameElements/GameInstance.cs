@@ -1,17 +1,16 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Game instance
     /// </summary>
     public class GameInstance : IGameInstance
     {
-        public const int MaxPlayerCount = 2;
         private readonly object mutex = new();
 
+        private const int MaxPlayerCount = GameConstants.MaxPlayerCount;
         private GameBoard board;
+        private List<string> players = new List<string>();
         private bool isGameActive = true;
-
-        List<string> players = new List<string>();     
 
         public GameInstance(Guid gameId, GameBoard board)
         {

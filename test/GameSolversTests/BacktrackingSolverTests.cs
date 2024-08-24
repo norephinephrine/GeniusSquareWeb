@@ -1,7 +1,5 @@
-using GameSolvers;
-using GameSolversTests;
-using GeniusSquareWeb.Models;
-using GeniusSquareWeb.Server;
+using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameSolvers.Backtracking;
 
 namespace GameSolversTests
 {

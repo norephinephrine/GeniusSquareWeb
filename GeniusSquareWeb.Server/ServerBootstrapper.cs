@@ -1,4 +1,4 @@
-﻿using GeniusSquareWeb.Models;
+﻿using GeniusSquareWeb.GameElements;
 
 namespace GeniusSquareWeb.Server
 {

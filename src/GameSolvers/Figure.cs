@@ -1,4 +1,4 @@
-﻿namespace GameSolvers
+﻿namespace GeniusSquareWeb.GameSolvers
 {
     public class Figure
     {

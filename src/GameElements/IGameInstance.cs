@@ -1,4 +1,4 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Interface for game instance.

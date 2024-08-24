@@ -1,11 +1,4 @@
-﻿using GameSolvers;
-using GeniusSquareWeb.Models;
-using GeniusSquareWeb.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GeniusSquareWeb.GameSolvers;
 
 namespace GameSolversTests
 {

@@ -1,12 +1,6 @@
-﻿using GeniusSquareWeb.Models;
-
-namespace GameSolvers
+﻿namespace GeniusSquareWeb.GameSolvers.Backtracking
 {
-    /// <summary>
-    /// Transform game board state to a set of linear equations that can be solved
-    /// using .
-    /// </summary>
-    public class LinearSolver : ISolver
+    public class BacktrackingSolver : ISolver
     {
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
@@ -16,7 +10,7 @@ namespace GameSolvers
             int[,] iteratingBoard = board;
             int figureIndex = 0;
 
-            bool result = this.SolverHelper(iteratingBoard, figureIndex);
+            bool result = SolverHelper(iteratingBoard, figureIndex);
             if (result != true)
             {
                 throw new Exception("Backtracking solver should have solved the game. Instead it failed");
@@ -51,11 +45,11 @@ namespace GameSolvers
 
                                 if (figureRowPlacement >= rowCount
                                     || figureColumnPlacement >= columnCount
-                                    || (board[figureRowPlacement, figureColumnPlacement] != 0 && figureOrientation[i, j] > 0))
+                                    || board[figureRowPlacement, figureColumnPlacement] != 0 && figureOrientation[i, j] > 0)
                                 {
                                     isNotValidFigure = true;
                                     break;
-                                }         
+                                }
                             }
 
                             if (isNotValidFigure)
@@ -85,7 +79,7 @@ namespace GameSolvers
                         }
 
                         // if last figureIndex return true, else try to solve it further.
-                        if (figureIndex == 8 || this.SolverHelper(board, figureIndex + 1))
+                        if (figureIndex == 8 || SolverHelper(board, figureIndex + 1))
                         {
                             return true;
                         }
@@ -98,7 +92,7 @@ namespace GameSolvers
                                 int figureRowPlacement = startingRow + i;
                                 int figureColumnPlacement = startingColumn + j;
 
-                                if (board[figureRowPlacement, figureColumnPlacement] > - 1
+                                if (board[figureRowPlacement, figureColumnPlacement] > -1
                                     && figureOrientation[i, j] != 0)
                                 {
                                     board[figureRowPlacement, figureColumnPlacement] = 0;

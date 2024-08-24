@@ -1,4 +1,4 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Class representing a dice for Genius Square.

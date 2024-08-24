@@ -1,13 +1,13 @@
-﻿using GeniusSquareWeb.Models;
+﻿using GeniusSquareWeb.GameElements;
 
-namespace GameSolvers
+namespace GeniusSquareWeb.GameSolvers.DancingLinks
 {
     /// <summary>
     /// Dancing link solver utilising algorithm X.
     /// </summary>
     public class DlxSolver : ISolver
     {
-        private const int FigureCount = 9;
+        private const int FigureCount = GameConstants.FigureCount;
         private Figure[] figureList = DefaultFigures.FigureList;
 
         private Node root;
@@ -47,23 +47,23 @@ namespace GameSolvers
 
             }
 
-            PlaceFiguresOnBoard(board, this.placedFigure);
+            PlaceFiguresOnBoard(board, placedFigure);
 
-            for (int i = FigureCount -1; i>=0; i --)
+            for (int i = FigureCount - 1; i >= 0; i--)
             {
                 current = placedFigure[i];
 
                 do
                 {
                     current = current.Left;
-                    this.UncoverNode(current.ColumnHead);
+                    UncoverNode(current.ColumnHead);
                 }
                 while (current != placedFigure[i]);
             }
 
             foreach (Node node in nodes)
             {
-                this.UncoverNode(node.ColumnHead);
+                UncoverNode(node.ColumnHead);
             }
 
             return board;
@@ -71,16 +71,16 @@ namespace GameSolvers
 
         private bool DlxIteration(int k)
         {
-            if (this.root.Right == root)
+            if (root.Right == root)
             {
                 return true;
             }
 
             // choose next minimum
-            Node c = this.GetNextMinColumn(root);
+            Node c = GetNextMinColumn(root);
 
             // cover cell
-            this.CoverNode(c);
+            CoverNode(c);
 
             // logic?
             Node r = c.Down;
@@ -95,7 +95,7 @@ namespace GameSolvers
                     j = j.Right;
                 }
 
-                if(this.DlxIteration(k + 1))
+                if (DlxIteration(k + 1))
                 {
                     return true;
                 }
@@ -114,7 +114,7 @@ namespace GameSolvers
             }
 
             // uncover cell
-            this.UncoverNode(c);
+            UncoverNode(c);
             return false;
         }
 
@@ -198,7 +198,7 @@ namespace GameSolvers
             int[,] startingBoard,
             Node[] placedFigure)
         {
-            const int offset = GeniusSquareDancingLinks.Offset;
+            const int offset = GameConstants.DancingLinkFigureOffset;
 
             foreach (Node figure in placedFigure)
             {

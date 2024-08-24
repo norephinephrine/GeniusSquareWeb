@@ -1,21 +1,21 @@
-﻿
-using Node = GameSolvers.DlxSolver.Node;
-namespace GameSolvers
+﻿using GeniusSquareWeb.GameElements;
+using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
+
+namespace GeniusSquareWeb.GameSolvers.DancingLinks
 {
     public static class GeniusSquareDancingLinks
     {
-        public const int Offset = 100;
+        private const int Offset = GameConstants.DancingLinkFigureOffset;
+        private const int FigureCount = GameConstants.FigureCount;
 
-        const int FigureCount = 9;
-
-        const int BoardRowCount = 6;
-        const int BoardColumnCount = 6;
+        const int BoardRowCount = GameConstants.BoardRowCount;
+        const int BoardColumnCount = GameConstants.BoardColumnCount;
 
         // 625 placements + 1 for list header
-        const int NodeRowCount = 626;
+        private const int NodeRowCount = 626;
 
         // 9 figures + 6x6 cells
-        const int NodeColumnCount = 45; 
+        private const int NodeColumnCount = 45;
 
         public static Node GenerateBoard()
         {
@@ -44,7 +44,7 @@ namespace GameSolvers
 
             // place rows
             int rowIndex = 1;
-            for (int figureIndex = 0; figureIndex < figureList.Length; figureIndex ++)
+            for (int figureIndex = 0; figureIndex < figureList.Length; figureIndex++)
             {
                 Figure f = figureList[figureIndex];
 
@@ -57,24 +57,24 @@ namespace GameSolvers
                     {
                         for (int boardColumn = 0; boardColumn <= BoardColumnCount - figureColumCount; boardColumn++)
                         {
-                            for (int i= 0; i < figureRowCount; i++)
+                            for (int i = 0; i < figureRowCount; i++)
                             {
-                                for(int j= 0; j < figureColumCount; j++)
+                                for (int j = 0; j < figureColumCount; j++)
                                 {
-                                    if (figureOrientation[i , j] != 0)
+                                    if (figureOrientation[i, j] != 0)
                                     {
                                         // calculate cell index
                                         int cellIndex =
                                             FigureCount
                                             + (boardRow + i) * 6
-                                            + (boardColumn + j);
+                                            + boardColumn + j;
 
                                         nodeMatrix[rowIndex, cellIndex] = new();
                                         nodeMatrix[rowIndex, cellIndex].ColumnHead = nodeMatrix[0, cellIndex];
 
                                         nodeMatrix[0, cellIndex].Size++;
                                     }
-                                }    
+                                }
                             }
                             nodeMatrix[rowIndex, figureIndex] = new();
                             nodeMatrix[rowIndex, figureIndex].ColumnHead = nodeMatrix[0, figureIndex];
@@ -92,7 +92,7 @@ namespace GameSolvers
                 int startingColumnindex;
                 for (startingColumnindex = 0; startingColumnindex < NodeColumnCount; startingColumnindex++)
                 {
-                    if (nodeMatrix[i , startingColumnindex] != null)
+                    if (nodeMatrix[i, startingColumnindex] != null)
                     {
                         break;
                     }
@@ -113,11 +113,11 @@ namespace GameSolvers
 
                         predecessor = nodeMatrix[i, j];
                     }
-                }    
+                }
             }
 
             for (int j = 0; j < NodeColumnCount; j++)
-            {         
+            {
                 Node currentNode = nodeMatrix[0, j];
                 currentNode.Up = currentNode;
                 currentNode.Down = currentNode;
@@ -170,7 +170,7 @@ namespace GameSolvers
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i,j]!=null)
+                    if (board[i, j] != null)
                     {
                         Console.Write($"{1,5}");
                     }

@@ -1,4 +1,4 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 {
     /// <summary>
     /// Static class that holds default dices for Genius Square.

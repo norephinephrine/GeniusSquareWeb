@@ -5,6 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<RootNamespace>GeniusSquareWeb.SolverBenchmark</RootNamespace>
+	<AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameElements\GameElements.csproj" />
     <ProjectReference Include="..\GameSolvers\GameSolvers.csproj" />
   </ItemGroup>
 

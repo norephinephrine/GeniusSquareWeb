@@ -1,6 +1,4 @@
-﻿using GeniusSquareWeb.Models;
-
-namespace GameSolvers
+﻿namespace GeniusSquareWeb.GameSolvers
 {
     public interface ISolver
     {

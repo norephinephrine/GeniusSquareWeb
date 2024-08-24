@@ -1,12 +1,12 @@
-﻿namespace GeniusSquareWeb.Models
+﻿namespace GeniusSquareWeb.GameElements
 { 
     /// <summary>
     /// Class representing a game board for Genius Square.
     /// </summary>
     public record class GameBoard
     {
-        private const int RowCount = 6;
-        private const int ColumnCount = 6;
+        private const int RowCount = GameConstants.BoardColumnCount;
+        private const int ColumnCount = GameConstants.BoardColumnCount;
 
         /// <summary>
         /// Actual board.

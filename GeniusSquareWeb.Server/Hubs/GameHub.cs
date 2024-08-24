@@ -1,4 +1,4 @@
-﻿using GeniusSquareWeb.Models;
+﻿using GeniusSquareWeb.GameElements;
 using GeniusSquareWeb.Server.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
