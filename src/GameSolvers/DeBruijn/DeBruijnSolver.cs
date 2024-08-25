@@ -36,6 +36,8 @@
             bool[] isFigurePlaced,
             ref int numberOfIterations)
         {
+            numberOfIterations++;
+
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
 

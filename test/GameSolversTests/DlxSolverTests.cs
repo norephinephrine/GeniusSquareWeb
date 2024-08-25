@@ -68,7 +68,6 @@ namespace GameSolversTests
             GameInstance gameInstance2 = gameManager.TryCreateGame();
 
             Node root = GeniusSquareDancingLinks.GenerateBoard();
-
             DlxSolver solver = new DlxSolver(root);
 
             // when
