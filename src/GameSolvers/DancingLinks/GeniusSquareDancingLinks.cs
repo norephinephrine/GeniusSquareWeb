@@ -20,28 +20,60 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             int[,] board = new int[BoardColumnCount, BoardColumnCount];
 
             Figure[] figureList = DefaultFigures.FigureList;
+            Node[] columnHeadRow = new Node[NodeColumnCount];
 
-            Node[,] nodeMatrix = new Node[NodeRowCount, NodeColumnCount];
+            // create first list header row
+            Node firstNode = new Node();
+            firstNode.Right = firstNode;
+            firstNode.Left = firstNode;
+            firstNode.Up = firstNode;
+            firstNode.Down = firstNode;
+            firstNode.ColumnHead = firstNode;
+            firstNode.Value = Offset + figureList[0].Value;
+            firstNode.Size = 0;
 
-            // place list header
-            for (int i = 0; i < figureList.Length; i++)
+            columnHeadRow[0] = firstNode;
+
+            // place list header representing figures
+            Node previous = firstNode;
+            for (int i = 1; i < figureList.Length; i++)
             {
-                nodeMatrix[0, i] = new Node();
-                nodeMatrix[0, i].ColumnHead = nodeMatrix[0, i];
-                nodeMatrix[0, i].Value = Offset + figureList[i].Value;
-                nodeMatrix[0, i].Size = 0;
+                Node newNode = new Node();
+                newNode.ColumnHead = newNode;
+                newNode.Value = Offset + figureList[i].Value;
+                newNode.Size = 0;
+                newNode.Up = newNode;
+                newNode.Down = newNode;
+
+                newNode.Right = firstNode;
+                newNode.Left = previous;
+                previous.Right = newNode;
+                firstNode.Left = newNode;
+
+                previous = newNode;
+                columnHeadRow[i] = newNode;
             }
 
+            // place list header representing cells.
             for (int i = FigureCount; i < FigureCount + BoardRowCount * BoardColumnCount; i++)
             {
-                nodeMatrix[0, i] = new Node();
-                nodeMatrix[0, i].ColumnHead = nodeMatrix[0, i];
-                nodeMatrix[0, i].Value = i - FigureCount;
-                nodeMatrix[0, i].Size = 0;
+                Node newNode = new Node();
+                newNode.ColumnHead = newNode;
+                newNode.Value = i - FigureCount;
+                newNode.Size = 0;
+                newNode.Up = newNode;
+                newNode.Down = newNode;
+
+                newNode.Right = firstNode;
+                newNode.Left = previous;
+                previous.Right = newNode;
+                firstNode.Left = newNode;
+
+                previous = newNode;
+                columnHeadRow[i] = newNode;
             }
 
             // place rows
-            int rowIndex = 1;
             for (int figureIndex = 0; figureIndex < figureList.Length; figureIndex++)
             {
                 Figure f = figureList[figureIndex];
@@ -55,6 +87,21 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     {
                         for (int boardColumn = 0; boardColumn <= BoardColumnCount - figureColumCount; boardColumn++)
                         {
+                            // create first row node
+                            Node figureColumnHead = columnHeadRow[figureIndex];
+                            figureColumnHead.Size++;
+
+                            Node firstRowNode = new Node();
+                            firstRowNode.ColumnHead = figureColumnHead;
+                            firstRowNode.Up = figureColumnHead.Up;
+                            firstRowNode.Down = figureColumnHead;
+                            figureColumnHead.Up.Down = firstRowNode;
+                            figureColumnHead.Up = firstRowNode;
+
+                            firstRowNode.Right = firstRowNode;
+                            firstRowNode.Left = firstRowNode;
+
+                            previous = firstRowNode;
                             for (int i = 0; i < figureRowCount; i++)
                             {
                                 for (int j = 0; j < figureColumCount; j++)
@@ -67,80 +114,38 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                                             + (boardRow + i) * 6
                                             + boardColumn + j;
 
-                                        nodeMatrix[rowIndex, cellIndex] = new();
-                                        nodeMatrix[rowIndex, cellIndex].ColumnHead = nodeMatrix[0, cellIndex];
+                                        Node columnHeadNode = columnHeadRow[cellIndex];
+                                        columnHeadNode.Size++;
 
-                                        nodeMatrix[0, cellIndex].Size++;
+                                        Node newNode = new();
+
+                                        // link column
+                                        newNode.ColumnHead = columnHeadNode;
+                                        newNode.Up = columnHeadNode.Up;
+                                        newNode.Down = columnHeadNode;
+                                        columnHeadNode.Up.Down = newNode;
+                                        columnHeadNode.Up = newNode;
+
+                                        newNode.Left = previous;
+                                        newNode.Right = firstRowNode;
+                                        previous.Right = newNode;
+                                        firstRowNode.Left = newNode;
+
+                                        previous = newNode;
                                     }
                                 }
                             }
-                            nodeMatrix[rowIndex, figureIndex] = new();
-                            nodeMatrix[rowIndex, figureIndex].ColumnHead = nodeMatrix[0, figureIndex];
-
-                            nodeMatrix[0, figureIndex].Size++;
-                            rowIndex++;
                         }
-                    }
-                }
-            }
-
-            // connect the nodes
-            for (int i = 0; i < NodeRowCount; i++)
-            {
-                int startingColumnindex;
-                for (startingColumnindex = 0; startingColumnindex < NodeColumnCount; startingColumnindex++)
-                {
-                    if (nodeMatrix[i, startingColumnindex] != null)
-                    {
-                        break;
-                    }
-                }
-                Node currentNode = nodeMatrix[i, startingColumnindex];
-                currentNode.Right = currentNode;
-                currentNode.Left = currentNode;
-
-                Node predecessor = currentNode;
-                for (int j = startingColumnindex + 1; j < NodeColumnCount; j++)
-                {
-                    if (nodeMatrix[i, j] != null)
-                    {
-                        nodeMatrix[i, j].Right = currentNode;
-                        nodeMatrix[i, j].Left = predecessor;
-                        predecessor.Right = nodeMatrix[i, j];
-                        currentNode.Left = nodeMatrix[i, j];
-
-                        predecessor = nodeMatrix[i, j];
-                    }
-                }
-            }
-
-            for (int j = 0; j < NodeColumnCount; j++)
-            {
-                Node currentNode = nodeMatrix[0, j];
-                currentNode.Up = currentNode;
-                currentNode.Down = currentNode;
-
-                Node predecessor = currentNode;
-                for (int i = 1; i < NodeRowCount; i++)
-                {
-                    if (nodeMatrix[i, j] != null)
-                    {
-                        nodeMatrix[i, j].Down = currentNode;
-                        nodeMatrix[i, j].Up = predecessor;
-                        predecessor.Down = nodeMatrix[i, j];
-                        currentNode.Up = nodeMatrix[i, j];
-
-                        predecessor = nodeMatrix[i, j];
                     }
                 }
             }
 
             // create root
             Node root = new Node();
-            root.Right = nodeMatrix[0, 0];
-            nodeMatrix[0, 0].Left = root;
-            root.Left = nodeMatrix[0, NodeColumnCount - 1];
-            nodeMatrix[0, NodeColumnCount - 1].Right = root;
+            root.Right = firstNode;
+            root.Left = firstNode.Left;
+            firstNode.Left.Right = root;
+            firstNode.Left = root;
             root.Value = 9999;
 
             // print board if needed
