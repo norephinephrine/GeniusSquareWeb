@@ -11,11 +11,9 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
         const int BoardRowCount = GameConstants.BoardRowCount;
         const int BoardColumnCount = GameConstants.BoardColumnCount;
 
-        // 625 placements + 1 for list header
-        private const int NodeRowCount = 626;
+        private const int NodeRowCount = GameConstants.NodeRowCountDancingLinks;
 
-        // 9 figures + 6x6 cells
-        private const int NodeColumnCount = 45;
+        private const int NodeColumnCount = GameConstants.NodeColumnCountDancingLinks;
 
         public static Node GenerateBoard()
         {

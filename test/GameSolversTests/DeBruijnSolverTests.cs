@@ -4,7 +4,7 @@ using GeniusSquareWeb.GameSolvers.DeBruijn;
 namespace GameSolversTests
 {
     /// <summary>
-    /// DeBrujin algorithm tests.
+    /// De Brujin algorithm tests.
     /// </summary>
     [TestClass]
     public class DeBruijnSolverTests
@@ -44,9 +44,13 @@ namespace GameSolversTests
 
             DeBruijnSolver solver = new DeBruijnSolver();
 
-            // when & then
-            _ = solver.Solve(gameInstance1.Board.Board);
-            _ = solver.Solve(gameInstance2.Board.Board);
+            // when
+            int[,] solvedBoard1 = solver.Solve(gameInstance1.Board.Board);
+            int[,] solvedBoard2 = solver.Solve(gameInstance2.Board.Board);
+
+            // then
+            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solvedBoard1);
+            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solvedBoard2);
         }
     }
 }

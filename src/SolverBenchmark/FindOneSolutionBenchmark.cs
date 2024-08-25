@@ -4,10 +4,13 @@ using GeniusSquareWeb.GameElements;
 using GeniusSquareWeb.GameSolvers.Backtracking;
 using GeniusSquareWeb.GameSolvers.DeBruijn;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
+using GeniusSquareWeb.GameSolvers.Linear;
+using GeniusSquareWeb.GameSolvers.Linear.IlpSolvers;
 
 namespace GeniusSquareWeb.SolverBenchmark
 {
     [MinColumn, MaxColumn]
+    [Outliers(OutlierMode.DontRemove)]
     public class FindOneSolutionBenchmark
     {
         private GameManager gameManager;
@@ -16,6 +19,10 @@ namespace GeniusSquareWeb.SolverBenchmark
         private DeBruijnSolver DeBruijnSolver;
         private DlxSolver DlxSolver;
 
+        private LinearSolver BopLinearSolver;
+        private LinearSolver ScipLinearSolver;
+        private LinearSolver SatLinearSolver;
+
         public FindOneSolutionBenchmark()
         {
             this.gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
@@ -23,9 +30,12 @@ namespace GeniusSquareWeb.SolverBenchmark
             BacktrackingSolver = new BacktrackingSolver();
             DeBruijnSolver = new DeBruijnSolver();
             DlxSolver = new DlxSolver(GeniusSquareDancingLinks.GenerateBoard());
+
+            BopLinearSolver = new LinearSolver(new BopIlpSolver());
+            ScipLinearSolver = new LinearSolver(new ScipIlpSolver());
+            SatLinearSolver = new LinearSolver(new SatIlpSolver());
         }
 
-        [Outliers(OutlierMode.DontRemove)]
         [Benchmark]
         public int[,] DefaultBacktracking()
         {
@@ -33,7 +43,6 @@ namespace GeniusSquareWeb.SolverBenchmark
             return BacktrackingSolver.Solve(gameInstance.Board.Board);
         }
 
-        [Outliers(OutlierMode.DontRemove)]
         [Benchmark]
         public int[,] DeBruijn()
         {
@@ -41,12 +50,32 @@ namespace GeniusSquareWeb.SolverBenchmark
             return DeBruijnSolver.Solve(gameInstance.Board.Board);
         }
 
-        [Outliers(OutlierMode.DontRemove)]
         [Benchmark]
         public int[,] DancingLinksAlgorithmX()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
             return DlxSolver.Solve(gameInstance.Board.Board);
+        }
+
+        [Benchmark]
+        public int[,] ILP_SCIP()
+        {
+            GameInstance gameInstance = gameManager.TryCreateGame();
+            return ScipLinearSolver.Solve(gameInstance.Board.Board);
+        }
+
+        [Benchmark]
+        public int[,] ILP_BOP()
+        {
+            GameInstance gameInstance = gameManager.TryCreateGame();
+            return BopLinearSolver.Solve(gameInstance.Board.Board);
+        }
+
+        [Benchmark]
+        public int[,] ILP_CP_SAT()
+        {
+            GameInstance gameInstance = gameManager.TryCreateGame();
+            return SatLinearSolver.Solve(gameInstance.Board.Board);
         }
     }
 }

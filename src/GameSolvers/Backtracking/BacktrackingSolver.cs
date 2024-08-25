@@ -1,6 +1,6 @@
 ﻿namespace GeniusSquareWeb.GameSolvers.Backtracking
 {
-    public class BacktrackingSolver : ISolver
+    public class BacktrackingSolver : IGameSolver
     {
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 

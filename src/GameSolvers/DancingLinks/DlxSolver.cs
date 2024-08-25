@@ -5,7 +5,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
     /// <summary>
     /// Dancing link solver utilising algorithm X.
     /// </summary>
-    public class DlxSolver : ISolver
+    public class DlxSolver : IGameSolver
     {
         private const int FigureCount = GameConstants.FigureCount;
         private Figure[] figureList = DefaultFigures.FigureList;

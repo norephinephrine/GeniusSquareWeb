@@ -1,6 +1,6 @@
 ﻿namespace GeniusSquareWeb.GameSolvers.DeBruijn
 {
-    public class DeBruijnSolver : ISolver
+    public class DeBruijnSolver : IGameSolver
     {
         private const int FigureCount = 9;
 

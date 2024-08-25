@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.OrTools" Version="9.10.4067" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameElements\GameElements.csproj" />
-    <ProjectReference Include="..\Models\GameElements.csproj" />
   </ItemGroup>
 
 </Project>
