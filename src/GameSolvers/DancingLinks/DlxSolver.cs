@@ -17,7 +17,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             this.root = root;
         }
 
-        public int[,] Solve(int[,] board)
+        public SolverResult Solve(int[,] board)
         {
             // reduce dancing links
             Node current = root.Right;
@@ -41,7 +41,8 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 }
             }
 
-            if (!DlxIteration(0))
+            int numberOfIterations = 0;
+            if (!DlxIteration(0, ref numberOfIterations))
             {
                 throw new Exception("Dlx solver should have solved the game. Instead it failed");
 
@@ -66,11 +67,16 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 UncoverNode(node.ColumnHead);
             }
 
-            return board;
+            return new SolverResult
+            {
+                SolvedBoard = board,
+                NumberOfIterations = numberOfIterations
+            };
         }
 
-        private bool DlxIteration(int k)
+        private bool DlxIteration(int k, ref int numberOfIterations)
         {
+            numberOfIterations++;
             if (root.Right == root)
             {
                 return true;
@@ -95,7 +101,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     j = j.Right;
                 }
 
-                if (DlxIteration(k + 1))
+                if (DlxIteration(k + 1, ref numberOfIterations))
                 {
                     return true;
                 }

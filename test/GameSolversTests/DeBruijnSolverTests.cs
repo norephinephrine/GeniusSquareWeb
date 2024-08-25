@@ -1,4 +1,5 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.GameSolvers.DeBruijn;
 
 namespace GameSolversTests
@@ -21,14 +22,15 @@ namespace GameSolversTests
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            DeBruijnSolver deBruijnSolver = new DeBruijnSolver();
+            DeBruijnSolver solver = new DeBruijnSolver();
 
             int[,] board = gameBoard.Board;
+
             // when
-            int[,] solvedBoard = deBruijnSolver.Solve(board);
+            SolverResult solverResult = solver.Solve(gameBoard.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);
+            Utilities.ValidateBlockSolution(gameBoard.Board, solverResult.SolvedBoard);
         }
 
         /// <summary>
@@ -45,12 +47,12 @@ namespace GameSolversTests
             DeBruijnSolver solver = new DeBruijnSolver();
 
             // when
-            int[,] solvedBoard1 = solver.Solve(gameInstance1.Board.Board);
-            int[,] solvedBoard2 = solver.Solve(gameInstance2.Board.Board);
+            SolverResult solverResult1 = solver.Solve(gameInstance1.Board.Board);
+            SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solvedBoard1);
-            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solvedBoard2);
+            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
+            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
         }
     }
 }

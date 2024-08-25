@@ -8,6 +8,6 @@
         /// <summary>
         /// Solve game.
         /// </summary>
-        public int[,] Solve(int[,] board);
+        public SolverResult Solve(int[,] board);
     }
 }

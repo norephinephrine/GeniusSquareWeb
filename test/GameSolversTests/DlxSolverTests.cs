@@ -1,6 +1,7 @@
 ﻿using GeniusSquareWeb.GameElements;
 using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
+using GeniusSquareWeb.GameSolvers;
 
 namespace GameSolversTests
 {
@@ -46,13 +47,13 @@ namespace GameSolversTests
 
             GameBoard gameBoard = gameInstance.Board;
             Node root = GeniusSquareDancingLinks.GenerateBoard();
-            DlxSolver dlxSolver = new DlxSolver(root);
+            DlxSolver solver = new DlxSolver(root);
 
             // when
-            int[,] solvedBoard = dlxSolver.Solve(gameBoard.Board);
+            SolverResult solverResult = solver.Solve(gameBoard.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameBoard.Board, solvedBoard);
+            Utilities.ValidateBlockSolution(gameBoard.Board, solverResult.SolvedBoard);
         }
 
         /// <summary>
@@ -71,12 +72,12 @@ namespace GameSolversTests
             DlxSolver solver = new DlxSolver(root);
 
             // when
-            int[,] solvedBoard1 = solver.Solve(gameInstance1.Board.Board);
-            int[,] solvedBoard2 = solver.Solve(gameInstance2.Board.Board);
+            SolverResult solverResult1 = solver.Solve(gameInstance1.Board.Board);
+            SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solvedBoard1);
-            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solvedBoard2);
+            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
+            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
         }
     }
 }

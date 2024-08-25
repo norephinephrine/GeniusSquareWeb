@@ -33,7 +33,7 @@ namespace GeniusSquareWeb.GameSolvers.Linear
         }
 
         /// <inheritdoc/>
-        public int[,] Solve(int[,] board)
+        public SolverResult Solve(int[,] board)
         {
             int[] endBoard = new int[LinearRowCount];
 
@@ -86,9 +86,13 @@ namespace GeniusSquareWeb.GameSolvers.Linear
                 N: LinearRowCount,
                 M: reducedColumnCount);
 
-            return this.PlaceFiguresOnBoard(
-                resultColumns,
-                board);
+            return new SolverResult
+            {
+                SolvedBoard = this.PlaceFiguresOnBoard(
+                    resultColumns,
+                    board),
+                NumberOfIterations = 1
+            };
         }
 
         private int[,] PlaceFiguresOnBoard(

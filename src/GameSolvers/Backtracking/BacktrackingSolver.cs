@@ -5,22 +5,36 @@
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
-        public int[,] Solve(int[,] board)
+        public SolverResult Solve(int[,] board)
         {
             int[,] iteratingBoard = board;
             int figureIndex = 0;
 
-            bool result = SolverHelper(iteratingBoard, figureIndex);
+            int iterationCount = 0;
+            bool result = SolverHelper(
+                iteratingBoard,
+                figureIndex,
+                ref iterationCount);
+
             if (result != true)
             {
                 throw new Exception("Backtracking solver should have solved the game. Instead it failed");
             }
 
-            return iteratingBoard;
+            return new SolverResult
+            {
+                SolvedBoard = board,
+                NumberOfIterations = iterationCount,
+            };
         }
 
-        private bool SolverHelper(int[,] board, int figureIndex)
+        private bool SolverHelper(
+            int[,] board,
+            int figureIndex,
+            ref int iterationCount)
         {
+            iterationCount++;
+
             IEnumerable<int[,]> figureOrientationList = figureList[figureIndex];
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
@@ -79,7 +93,8 @@
                         }
 
                         // if last figureIndex return true, else try to solve it further.
-                        if (figureIndex == 8 || SolverHelper(board, figureIndex + 1))
+                        if (figureIndex == 8
+                            || SolverHelper(board, figureIndex + 1, ref iterationCount))
                         {
                             return true;
                         }

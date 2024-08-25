@@ -7,25 +7,34 @@
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
-        public int[,] Solve(int[,] board)
+        public SolverResult Solve(int[,] board)
         {
             int[,] iteratingBoard = board;
             bool[] isFigurePlaced = new bool[FigureCount];
 
 
-            bool result = SolverHelper(iteratingBoard, isFigurePlaced);
+            int numberOfIterations = 0;
+            bool result = SolverHelper(
+                iteratingBoard,
+                isFigurePlaced,
+                ref numberOfIterations);
             if (result != true)
             {
 
                 throw new Exception("De Bruijn solver should have solved the game. Instead it failed");
             }
 
-            return iteratingBoard;
+            return new SolverResult
+            {
+                SolvedBoard = board,
+                NumberOfIterations = numberOfIterations
+            };
         }
 
         private bool SolverHelper(
             int[,] board,
-            bool[] isFigurePlaced)
+            bool[] isFigurePlaced,
+            ref int numberOfIterations)
         {
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
@@ -110,7 +119,7 @@
 
                     // next figure placement start
                     isFigurePlaced[figureIndex] = true;
-                    if (SolverHelper(board, isFigurePlaced))
+                    if (SolverHelper(board, isFigurePlaced, ref numberOfIterations))
                     {
                         return true;
                     }
