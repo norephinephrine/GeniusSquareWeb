@@ -88,7 +88,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             // cover cell
             CoverNode(c);
 
-            // logic?
+            // pick row
             Node r = c.Down;
             while (r != c)
             {
@@ -105,9 +105,6 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 {
                     return true;
                 }
-                // potentailly not needed
-                // r = placedFigure[0]
-                //c = r.ColumnHead;
 
                 j = r.Left;
                 while (j != r)

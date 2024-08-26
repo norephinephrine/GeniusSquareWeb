@@ -10,9 +10,23 @@
                 </button>
             </li>
         </ul>
-        <button 
+        <button
+            class="buttonPlayer"
             @click="createGameRoom">
-            Create a new game
+            New game (Player)
+        </button>
+    </div>
+    <br/>
+    <div>
+        <button 
+            class="buttonBot1"
+            @click="createGameRoomBot(0)">
+            New game (Easy Bot)
+        </button>
+        <button 
+            class="buttonBot2"
+            @click="createGameRoomBot(1)">
+            New game (Hard Bot)
         </button>
     </div>
 </template>
@@ -55,6 +69,27 @@
                     this.$emit("createGame", gameRecord);
 
                 },
+                async createGameRoomBot(type:number)
+                {
+                    if (this.signalRConnection == undefined)
+                    {
+                        throw new Error('SignalR connection should not be null');
+                    }
+
+                    let gameRecord:GameData = await this.signalRConnection.invoke("CreateGameBotAsync",type)
+                    .catch(ex =>
+                    {
+                        console.log(ex);
+                    });
+
+                    if(gameRecord == null)
+                    {
+                        alert("Failed to create game");
+                        return;
+                    }
+                    
+                    this.$emit("joinGame", gameRecord);
+                },
                 async joinGameRoom(gameId: string)
                 {
 
@@ -81,6 +116,55 @@
 
 ul{height:400px; width:400px;}
 ul{overflow:hidden; overflow-y:scroll;}
+
+.buttonPlayer {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.buttonBot1 {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.buttonBot2 {
+    background-color: rgb(255, 140, 0);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover state */
+.buttonPlayer:hover {
+    background-color: darkgreen;
+}
+
+/* Hover state */
+.buttonBot1:hover {
+    background-color: rgb(187, 106, 8);
+}
+
+/* Hover state */
+.buttonBot2:hover {
+    background-color: rgb(187, 106, 8);
+}
 
 button.link { 
     background:none;
