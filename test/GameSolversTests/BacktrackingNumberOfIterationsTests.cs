@@ -24,6 +24,7 @@ namespace GameSolversTests
         public void CountBacktrackingSolverIterations()
         {
             // given
+            object mutex = new object();
             GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
 
             int n = 100;
@@ -38,15 +39,20 @@ namespace GameSolversTests
             Node root = GeniusSquareDancingLinks.GenerateBoard();
             DlxSolver dlxSolver = new DlxSolver(root);
 
-            for (int i = 0; i < n; i++)
+            Parallel.For(0, n, (int i) =>
             {
                 GameInstance gameInstance = gameManager.TryCreateGame();
                 GameBoard gameBoard = gameInstance.Board;
 
                 deBruijnSolutions[i] = deBruijnSolver.Solve(gameBoard.Board);
                 backtrackingSolutions[i] = backtrackingSolver.Solve(gameBoard.Board);
-                dlxSolutions[i] = dlxSolver.Solve(gameBoard.Board);
-            }
+
+                // DLX solver is not thread safe
+                lock(mutex)
+                {
+                    dlxSolutions[i] = dlxSolver.Solve(gameBoard.Board);
+                }
+            });
 
             // write Backtracking solver results
             int min = backtrackingSolutions.Min(result => result.NumberOfIterations);

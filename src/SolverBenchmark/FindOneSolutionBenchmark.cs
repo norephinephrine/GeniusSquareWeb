@@ -40,42 +40,42 @@ namespace GeniusSquareWeb.SolverBenchmark
         public int[,] DefaultBacktracking()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return BacktrackingSolver.Solve(gameInstance.Board.Board);
+            return BacktrackingSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DeBruijn()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DeBruijnSolver.Solve(gameInstance.Board.Board);
+            return DeBruijnSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DancingLinksAlgorithmX()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DlxSolver.Solve(gameInstance.Board.Board);
+            return DlxSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_SCIP()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return ScipLinearSolver.Solve(gameInstance.Board.Board);
+            return ScipLinearSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_BOP()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return BopLinearSolver.Solve(gameInstance.Board.Board);
+            return BopLinearSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_CP_SAT()
         {
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return SatLinearSolver.Solve(gameInstance.Board.Board);
+            return SatLinearSolver.Solve(gameInstance.Board.Board).SolvedBoard;
         }
     }
 }
