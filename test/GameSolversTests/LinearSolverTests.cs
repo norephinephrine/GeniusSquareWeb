@@ -21,8 +21,8 @@ namespace GameSolversTests
             {
                 return new[]
                 {
-                    new object[] { new ScipIlpSolver() },
                     new object[] { new BopIlpSolver() },
+                    new object[] { new ScipIlpSolver() },
                     new object[] { new SatIlpSolver() },
                 };
             }
@@ -32,7 +32,7 @@ namespace GameSolversTests
         /// Validate linear solver.
         /// </summary>
         [TestMethod]
-        public void ValidateGetAllPossibleColumns()
+        public void ValidateGetAllPossibleColumnsMethod()
         {
             // given
             LinearColumn[] columns = LinearGeniusSquare.GetAllPossibleColumns();
@@ -68,7 +68,22 @@ namespace GameSolversTests
             SolverResult solvedReulst = solver.Solve(gameBoard.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameBoard.Board, solvedReulst.SolvedBoard);
+            Utilities.ValidateGameSolution(gameBoard.Board, solvedReulst.SolvedBoard);
+        }
+
+        /// <summary>
+        /// Validate all game boards using linear solver.
+        /// </summary>
+        [TestMethod]
+        [DynamicData(nameof(IlpSolvers))]
+        [Ignore("Test runs too long. Bop ~ 40s.Sat and SIP ~ 13.5min.")]
+        public void ValidateAllSolutions(IlpSolver ilpSolver)
+        {
+            // given
+            LinearSolver solver = new LinearSolver(ilpSolver);
+
+            // when and
+            Utilities.SolveAndValidateAllGameBoards(solver, true);
         }
 
         /// <summary>
@@ -90,8 +105,8 @@ namespace GameSolversTests
             SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
-            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
         }   
     }
 }

@@ -2,6 +2,7 @@
 using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
 using GeniusSquareWeb.GameSolvers;
+using GeniusSquareWeb.GameSolvers.Backtracking;
 
 namespace GameSolversTests
 {
@@ -53,7 +54,22 @@ namespace GameSolversTests
             SolverResult solverResult = solver.Solve(gameBoard.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameBoard.Board, solverResult.SolvedBoard);
+            Utilities.ValidateGameSolution(gameBoard.Board, solverResult.SolvedBoard);
+        }
+
+        /// <summary>
+        /// Validate all solutions for Dlx solver.
+        /// </summary>
+        [TestMethod]
+        [Ignore("Test runs too long. ~17 mins.")]
+        public void ValidateAllSolution()
+        {
+            // given
+            Node root = GeniusSquareDancingLinks.GenerateBoard();
+            DlxSolver solver = new DlxSolver(root);
+
+            // when and then
+            Utilities.SolveAndValidateAllGameBoards(solver, false);
         }
 
         /// <summary>
@@ -75,8 +91,8 @@ namespace GameSolversTests
             SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
-            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
         }
     }
 }

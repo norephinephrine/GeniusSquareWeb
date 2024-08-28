@@ -10,27 +10,17 @@ namespace GameSolversTests
     [TestClass]
     public class DeBruijnSolverTests
     {
-
         /// <summary>
-        /// Validate De Bruijn solver.
+        /// Validate all solutions for De Bruijn solver.
         /// </summary>
         [TestMethod]
-        public void ValidateSolver()
+        public void ValidateAllSolution()
         {
             // given
-            GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
-            GameInstance gameInstance = gameManager.TryCreateGame();
-
-            GameBoard gameBoard = gameInstance.Board;
             DeBruijnSolver solver = new DeBruijnSolver();
 
-            int[,] board = gameBoard.Board;
-
-            // when
-            SolverResult solverResult = solver.Solve(gameBoard.Board);
-
-            // then
-            Utilities.ValidateBlockSolution(gameBoard.Board, solverResult.SolvedBoard);
+            // when and then
+            Utilities.SolveAndValidateAllGameBoards(solver, true);
         }
 
         /// <summary>
@@ -51,8 +41,8 @@ namespace GameSolversTests
             SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
 
             // then
-            Utilities.ValidateBlockSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
-            Utilities.ValidateBlockSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
+            Utilities.ValidateGameSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
         }
     }
 }
