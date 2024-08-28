@@ -1,4 +1,6 @@
-﻿namespace GeniusSquareWeb.GameSolvers.DeBruijn
+﻿using GeniusSquareWeb.GameElements;
+
+namespace GeniusSquareWeb.GameSolvers.DeBruijn
 {
     public class DeBruijnSolver : IGameSolver
     {

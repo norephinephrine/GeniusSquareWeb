@@ -1,4 +1,6 @@
-﻿namespace GeniusSquareWeb.GameSolvers.Backtracking
+﻿using GeniusSquareWeb.GameElements;
+
+namespace GeniusSquareWeb.GameSolvers.Backtracking
 {
     public class BacktrackingSolver : IGameSolver
     {

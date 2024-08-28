@@ -3,7 +3,7 @@
 namespace GeniusSquareWeb.GameSolvers.Linear.IlpSolvers
 {
     /// <summary>
-    /// CP-SAT solver
+    /// CP-SAT solver that utilises constraint programming.
     /// </summary>
     public class SatIlpSolver : IlpSolver
     {
