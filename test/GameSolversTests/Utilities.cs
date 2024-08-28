@@ -1,4 +1,6 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Dices;
+using GeniusSquareWeb.GameElements.Figures;
 using GeniusSquareWeb.GameSolvers;
 using Google.Protobuf.WellKnownTypes;
 using System;

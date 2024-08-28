@@ -1,4 +1,5 @@
 using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Dices;
 using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.GameSolvers.Backtracking;
 using GeniusSquareWeb.GameSolvers.DeBruijn;

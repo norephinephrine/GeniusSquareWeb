@@ -1,47 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace GeniusSquareWeb.GameElements
+﻿namespace GeniusSquareWeb.GameElements.Figures
 {
     public static class DefaultFigures
     {
         public static Figure[] FigureList => new Figure[9]
         {
-            DefaultFigures.Monoid,
-            DefaultFigures.Domino,
-            DefaultFigures.TrominoI,
-            DefaultFigures.TrominoL,
-            DefaultFigures.TetrominoI,
-            DefaultFigures.TetrominoT,
-            DefaultFigures.TetrominoL,
-            DefaultFigures.TetrominoS,
-            DefaultFigures.TetrominoSquare,
-        };
+            Monomino,
+            Domino,
+            TrominoL,
+            TrominoI,
+            TetrominoI,
+            TetrominoT,
+            TetrominoL,
+            TetrominoS,
+            TetrominoSquare,
+        }
+        .OrderBy(figure => figure.Value)
+        .ToArray();
 
         public static IEnumerable<int[,]>[] FigureListOrientations => new IEnumerable<int[,]>[]
         {
-            DefaultFigures.Monoid.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.Domino.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TrominoI.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TrominoL.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoI.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoT.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoL.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoS.GetFigureOrientationsWithValueMultiplier(),
-            DefaultFigures.TetrominoSquare.GetFigureOrientationsWithValueMultiplier(),
+            Monomino.GetFigureOrientationsWithValueMultiplier(),
+            Domino.GetFigureOrientationsWithValueMultiplier(),
+            TrominoI.GetFigureOrientationsWithValueMultiplier(),
+            TrominoL.GetFigureOrientationsWithValueMultiplier(),
+            TetrominoI.GetFigureOrientationsWithValueMultiplier(),
+            TetrominoT.GetFigureOrientationsWithValueMultiplier(),
+            TetrominoL.GetFigureOrientationsWithValueMultiplier(),
+            TetrominoS.GetFigureOrientationsWithValueMultiplier(),
+            TetrominoSquare.GetFigureOrientationsWithValueMultiplier(),
         };
 
-        public readonly static Figure Monoid =
+        public readonly static Figure Monomino =
             new Figure(
                 figureShape:
                     new int[,] {
                         { 1 }
                     },
-                figureName: nameof(Monoid),
+                figureValue: 1,
                 figureTransformation: FigureTransformation.NoTransformation);
 
         public static Figure Domino =
@@ -50,7 +45,7 @@ namespace GeniusSquareWeb.GameElements
                     new int[,] {
                         { 1, 1 }
                     },
-                figureName: nameof(Domino),
+                figureValue: 2,
                 figureTransformation: FigureTransformation.TwoRotations);
 
         public static Figure TrominoL =
@@ -60,7 +55,7 @@ namespace GeniusSquareWeb.GameElements
                         { 1, 1 },
                         { 0, 1 }
                     },
-                figureName: nameof(TrominoL),
+                figureValue: 3,
                 figureTransformation: FigureTransformation.FourRotations);
 
         public static Figure TrominoI =
@@ -69,7 +64,7 @@ namespace GeniusSquareWeb.GameElements
                     new int[,] {
                         { 1, 1, 1 },
                     },
-                figureName: nameof(TrominoI),
+                figureValue: 4,
                 figureTransformation: FigureTransformation.TwoRotations);
 
 
@@ -80,7 +75,7 @@ namespace GeniusSquareWeb.GameElements
                         { 1, 1,},
                         { 1, 1,},
                     },
-                figureName: nameof(TetrominoSquare),
+                figureValue: 5,
                 figureTransformation: FigureTransformation.NoTransformation);
 
         public static Figure TetrominoL =
@@ -90,7 +85,7 @@ namespace GeniusSquareWeb.GameElements
                         { 1, 1, 1},
                         { 0, 0, 1},
                     },
-                figureName: nameof(TetrominoL),
+                figureValue: 6,
                 figureTransformation: FigureTransformation.FourRotationsAndReflection);
 
 
@@ -101,7 +96,7 @@ namespace GeniusSquareWeb.GameElements
                         { 1, 1, 0},
                         { 0, 1, 1},
                     },
-                figureName: nameof(TetrominoS),
+                figureValue: 7,
                 figureTransformation: FigureTransformation.TwoRotationsAndReflection);
 
         public static Figure TetrominoT =
@@ -111,7 +106,7 @@ namespace GeniusSquareWeb.GameElements
                         { 1, 1, 1},
                         { 0, 1, 0},
                     },
-                figureName: nameof(TetrominoT),
+                figureValue: 8,
                 figureTransformation: FigureTransformation.FourRotations);
 
         public static Figure TetrominoI =
@@ -120,7 +115,7 @@ namespace GeniusSquareWeb.GameElements
                     new int[,] {
                         { 1, 1, 1, 1},
                     },
-                figureName: nameof(TetrominoI),
+                figureValue: 9,
                 figureTransformation: FigureTransformation.TwoRotations);
     }
 }

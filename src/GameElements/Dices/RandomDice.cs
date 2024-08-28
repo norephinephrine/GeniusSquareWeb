@@ -1,4 +1,4 @@
-﻿namespace GeniusSquareWeb.GameElements
+﻿namespace GeniusSquareWeb.GameElements.Dices
 {
     /// <summary>
     /// Class representing a dice for Genius Square.
@@ -15,8 +15,8 @@
         /// </summary>
         public RandomDice(GameBoardField[] sides)
         {
-            this.diceSides = sides ?? throw new ArgumentNullException("Dice side array should not be null");
-            this.diceSideCount = sides.Count();
+            diceSides = sides ?? throw new ArgumentNullException("Dice side array should not be null");
+            diceSideCount = sides.Count();
         }
 
 
@@ -30,9 +30,9 @@
         /// <inheritdoc/>
         public GameBoardField GenerateDiceResult()
         {
-           int randomSide = Random.Next(diceSideCount);
+            int randomSide = Random.Next(diceSideCount);
 
-           return diceSides[randomSide];
+            return diceSides[randomSide];
         }
     }
 }

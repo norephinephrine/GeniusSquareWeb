@@ -1,4 +1,4 @@
-﻿using GeniusSquareWeb.GameElements;
+﻿using GeniusSquareWeb.GameElements.Figures;
 
 namespace GeniusSquareWeb.GameSolvers.DeBruijn
 {

@@ -63,6 +63,61 @@
                 board: null,
                 placedFigureCount : 0,
                 figures: {
+                    monomino: {
+                        color: 'lightgreen',
+                        cellMatrix: [
+                            [1],
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
+                    domino: {
+                        color: 'lightblue',
+                        cellMatrix: [
+                            [1],
+                            [1],  
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
+                    trominoL: {
+                        color: 'purple',
+                        cellMatrix: [
+                            [1, 0],
+                            [1, 1],  
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
+                    trominoI: {
+                        color: 'pink',
+                        cellMatrix: [
+                            [1],
+                            [1],
+                            [1],
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
+                    tetrominoSquare: {
+                        color: 'orange',
+                        cellMatrix: [
+                            [1, 1],
+                            [1, 1],  
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
+                    tetrominoL: {
+                        color: 'green',
+                        cellMatrix: [
+                            [1, 0],
+                            [1, 0],
+                            [1, 1]    
+                        ],
+                        opacity: 1,
+                        placedCellIndexes: null,
+                    },
                     tetrominoZ: {
                         color: 'red',
                         cellMatrix: [
@@ -81,25 +136,6 @@
                         opacity: 1,
                         placedCellIndexes: null,
                     },
-                    tetrominoL: {
-                        color: 'green',
-                        cellMatrix: [
-                            [1, 0],
-                            [1, 0],
-                            [1, 1]    
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    },
-                    tetrominoSquare: {
-                        color: 'orange',
-                        cellMatrix: [
-                            [1, 1],
-                            [1, 1],  
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    },
                     tetrominoI: {
                         color: 'darkgrey',
                         cellMatrix: [
@@ -111,42 +147,6 @@
                         opacity: 1,
                         placedCellIndexes: null,
                     },
-                    trominoI: {
-                        color: 'purple',
-                        cellMatrix: [
-                            [1, 0],
-                            [1, 1],  
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    },
-                    trominoL: {
-                        color: 'pink',
-                        cellMatrix: [
-                            [1],
-                            [1],
-                            [1],
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    },
-                    domino: {
-                        color: 'lightblue',
-                        cellMatrix: [
-                            [1],
-                            [1],  
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    },
-                    monomino: {
-                        color: 'lightgreen',
-                        cellMatrix: [
-                            [1],
-                        ],
-                        opacity: 1,
-                        placedCellIndexes: null,
-                    }
                 }
             };
         },

@@ -1,4 +1,5 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Figures;
 using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 
 namespace GeniusSquareWeb.GameSolvers.DancingLinks

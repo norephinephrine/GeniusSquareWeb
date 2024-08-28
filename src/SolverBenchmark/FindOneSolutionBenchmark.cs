@@ -6,6 +6,7 @@ using GeniusSquareWeb.GameSolvers.DeBruijn;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
 using GeniusSquareWeb.GameSolvers.Linear;
 using GeniusSquareWeb.GameSolvers.Linear.IlpSolvers;
+using GeniusSquareWeb.GameElements.Dices;
 
 namespace GeniusSquareWeb.SolverBenchmark
 {

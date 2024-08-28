@@ -3,6 +3,7 @@ using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
 using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.GameSolvers.Backtracking;
+using GeniusSquareWeb.GameElements.Dices;
 
 namespace GameSolversTests
 {

@@ -1,4 +1,4 @@
-﻿using GeniusSquareWeb.GameElements;
+﻿using GeniusSquareWeb.GameElements.Figures;
 
 namespace GameSolversTests
 {
@@ -17,7 +17,7 @@ namespace GameSolversTests
                     new int[,] {
                         { 1, 1 }
                     },
-                figureName: "test",
+                figureValue: 1,
                 figureTransformation: FigureTransformation.TwoRotations);
 
             // when and then
@@ -43,7 +43,7 @@ namespace GameSolversTests
                         { 1, 1 },
                         { 1, 0 }
                     },
-                figureName: "test",
+                figureValue: 1,
                 figureTransformation: FigureTransformation.FourRotations);
 
             // when and then
@@ -69,7 +69,7 @@ namespace GameSolversTests
                         { 1, 1, 0 },
                         { 0, 1, 1 }
                     },
-                figureName: "test",
+                figureValue: 1,
                 figureTransformation: FigureTransformation.TwoRotationsAndReflection);
 
             // when and then

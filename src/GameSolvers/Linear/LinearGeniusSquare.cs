@@ -1,4 +1,5 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Figures;
 using System.Collections;
 
 namespace GeniusSquareWeb.GameSolvers.Linear

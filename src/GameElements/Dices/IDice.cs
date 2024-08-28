@@ -1,9 +1,9 @@
-﻿namespace GeniusSquareWeb.GameElements
+﻿namespace GeniusSquareWeb.GameElements.Dices
 {
     /// <summary>
     /// Interface representing dice.
     /// </summary>
-    public interface IDice 
+    public interface IDice
     {
         /// <summary>
         /// Get dice side count.

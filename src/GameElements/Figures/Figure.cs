@@ -1,10 +1,8 @@
-﻿namespace GeniusSquareWeb.GameElements
+﻿namespace GeniusSquareWeb.GameElements.Figures
 {
     public class Figure
     {
-        private static int FigureValue = 0;
-
-        private int value = Interlocked.Increment(ref FigureValue);
+        private int figureValue = 0;
 
         private List<int[,]> figureOrientations;
 
@@ -12,14 +10,15 @@
         /// Ctor.
         /// </summary>
         /// <param name="figureShape">Figure shape.</param>
+        /// <param name="figureValue">Figure value.</param>
         /// <param name="figureTransformation">Figure transformation.</param>
         public Figure(
             int[,] figureShape,
-            string figureName,
+            int figureValue,
             FigureTransformation figureTransformation)
         {
-            this.Name = figureName;
-            int numberOfRotations = this.GetNumberOfRotations(figureTransformation);
+            this.figureValue = figureValue;
+            int numberOfRotations = GetNumberOfRotations(figureTransformation);
 
             bool shouldFlip =
                 figureTransformation == FigureTransformation.TwoRotationsAndReflection
@@ -28,10 +27,10 @@
             figureOrientations = new List<int[,]>();
 
             int[,] newFigure = figureShape;
-            for (int i = 0; i < (int) numberOfRotations; i++)
+            for (int i = 0; i < numberOfRotations; i++)
             {
                 figureOrientations.Add(newFigure);
-                newFigure = RotateRight(newFigure);     
+                newFigure = RotateRight(newFigure);
             }
 
             if (!shouldFlip)
@@ -42,7 +41,7 @@
             // reset figure and rotate it over the X axis
             newFigure = FlipOverXAxis(newFigure);
 
-            for (int i = 0; i < (int)numberOfRotations; i++)
+            for (int i = 0; i < numberOfRotations; i++)
             {
                 figureOrientations.Add(newFigure);
                 newFigure = RotateRight(newFigure);
@@ -50,16 +49,10 @@
         }
 
         /// <summary>
-        /// Get all figure orientations.
-        /// </summary>
-        /// <returns></returns>
-        public string Name { get; private set; }
-
-        /// <summary>
         /// Get the figure value.
         /// </summary>
         /// <returns></returns>
-        public int Value => this.value;
+        public int Value => figureValue;
 
         /// <summary>
         /// Get all figure orientations;
@@ -69,7 +62,7 @@
         {
             List<int[,]> newList = new List<int[,]>();
 
-            foreach (int[,] figureShape in this.figureOrientations)
+            foreach (int[,] figureShape in figureOrientations)
             {
                 newList.Add((int[,])figureShape.Clone());
             }
@@ -85,14 +78,14 @@
         {
             List<int[,]> newList = new List<int[,]>();
 
-            foreach (int[,] figureShape in this.figureOrientations)
+            foreach (int[,] figureShape in figureOrientations)
             {
                 int[,] copyList = (int[,])figureShape.Clone();
                 for (int i = 0; i < copyList.GetLength(0); i++)
                 {
                     for (int j = 0; j < copyList.GetLength(1); j++)
                     {
-                        copyList[i, j] *= this.value;
+                        copyList[i, j] *= figureValue;
                     }
                 }
 

@@ -1,4 +1,5 @@
 using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Dices;
 
 namespace GameElementsTests
 {

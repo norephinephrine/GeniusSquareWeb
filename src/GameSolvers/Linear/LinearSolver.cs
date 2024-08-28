@@ -1,4 +1,5 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameElements.Figures;
 using GeniusSquareWeb.GameSolvers.Linear.IlpSolvers;
 using Google.OrTools.LinearSolver;
 
