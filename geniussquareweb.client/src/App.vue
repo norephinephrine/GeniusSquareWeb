@@ -114,14 +114,18 @@
               this.currentGame = gameRecord;
               this.state = States.Game;
             },
-            async winGame()
+            async winGame(board)
             {
               if (this.state !== States.Game || this.currentGame == null)
               {
                 return;
               }
 
-              let didWin: boolean = await this.signalRConnection.invoke("WinGameAsync", this.currentGame.gameGuid)
+              this.currentGame.board = board;
+              let didWin: boolean = await this.signalRConnection.invoke(
+                "WinGameAsync",
+                this.currentGame.gameGuid, 
+                this.currentGame.board)
               .catch(ex =>
                   {
                       console.log(ex);
@@ -216,8 +220,8 @@
         <!-- <GameManager/> -->      
         <div v-else-if="state === States.Game">
           <GameManager
-          @win-game="winGame"
-          @update-board="(array: number[][]) => updateBoard(array)"
+          @win-game="(board: number[][]) => winGame(board)"
+          @update-board="(board: number[][]) => updateBoard(board)"
           :current-game="currentGame as GameData">
           </GameManager>
         </div>

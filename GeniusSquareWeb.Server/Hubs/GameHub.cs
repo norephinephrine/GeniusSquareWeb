@@ -1,4 +1,5 @@
 ﻿using GeniusSquareWeb.GameElements;
+using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.Server.Hubs;
 using GeniusSquareWeb.Server.SolversWithDelay;
 using Microsoft.AspNetCore.SignalR;
@@ -201,12 +202,22 @@ public class GameHub : Hub
     /// <param name="gameId">Game Id.</param>
     /// <param name="gameManager">Game manager.</param>
     /// <returns>True if game is won, false if not.</returns>
-    public async Task<bool> WinGameAsync(Guid gameId, IGameManager gameManager)
+    public async Task<bool> WinGameAsync(
+        Guid gameId,
+        int[][] board,
+        IGameManager gameManager)
     {
         string player = this.Context.ConnectionId;
         IGameInstance? gameInstance = gameManager.TryGetExistingGame(gameId);
 
-        if (gameInstance == null || !gameInstance.TryCompleteGame(player))
+        int[,] solvedBoard = ConvertJaggedArrayToMultiDimensional(board);
+
+        // validate that game exists, that board has proper values
+        // and that nobody else completed the game before us
+        if (gameInstance == null ||
+            !ValidateBoardHelper.ValidateOriginalBlockerPlacements(gameInstance.GetInitialBoardState(), solvedBoard) ||
+            !ValidateBoardHelper.ValidateBlockPlacement(solvedBoard) ||
+            !gameInstance.TryCompleteGame(player))
         {
             return false;
         }
@@ -246,7 +257,7 @@ public class GameHub : Hub
     private static async Task SolveUsingDeBruijnAsync(
         IHubContext<GameHub> hubContext,
         IGameManager gameManager,
-        GameInstance gameInstance,
+        IGameInstance gameInstance,
         string botPLayer)
     {
         DateTime currentTime = DateTime.Now;
@@ -259,7 +270,7 @@ public class GameHub : Hub
         DeBruijnSolverWithDelay deBruijnSolverWithDelay = new(callback);
 
         if(!await deBruijnSolverWithDelay.Solve(
-            gameInstance.Board.Board,
+            gameInstance.GetInitialBoardState(),
             DelayBetweenIterations))
         {
             Console.WriteLine("Solver could not find solution or game is over");
@@ -294,7 +305,7 @@ public class GameHub : Hub
     private static async Task SolvesUsingBacktrackingAsync(
         IHubContext<GameHub> hubContext,
         IGameManager gameManager,
-        GameInstance gameInstance,
+        IGameInstance gameInstance,
         string botPLayer)
     {
         DateTime currentTime = DateTime.Now;
@@ -307,7 +318,7 @@ public class GameHub : Hub
         BacktrackingSolverWithDelay backtrackingSolver = new(callback);
 
         if (!await backtrackingSolver.Solve(
-            gameInstance.Board.Board,
+            gameInstance.GetInitialBoardState(),
             DelayBetweenIterations))
         {
             Console.WriteLine("Solver could not find solution or game is over");
@@ -342,7 +353,7 @@ public class GameHub : Hub
     private static async Task SolvesUsingDlxAsync(
         IHubContext<GameHub> hubContext,
         IGameManager gameManager,
-        GameInstance gameInstance,
+        IGameInstance gameInstance,
         string botPLayer)
     {
         DateTime currentTime = DateTime.Now;
@@ -355,7 +366,7 @@ public class GameHub : Hub
         DlxSolverWithDelay dlxSolver = new(callback);
 
         if (!await dlxSolver.Solve(
-            gameInstance.Board.Board,
+            gameInstance.GetInitialBoardState(),
             DelayBetweenIterations))
         {
             Console.WriteLine("Solver could not find solution or game is over");
@@ -387,7 +398,7 @@ public class GameHub : Hub
     private static async Task TryWinGameBotAsync(
         IHubContext<GameHub> hubContext,
         IGameManager gameManager,
-        GameInstance gameInstance,
+        IGameInstance gameInstance,
         string botPlayer)
     {
         if (!gameInstance.TryCompleteGame(botPlayer))
@@ -455,5 +466,22 @@ public class GameHub : Hub
         }
 
         return jaggedArray;
+    }
+
+    private static int[,] ConvertJaggedArrayToMultiDimensional(int[][] array)
+    {
+        int rowCount = array.Length;
+        int columnCount = array[0].Length;
+
+        int[,] multiDimensionalArray = new int[rowCount, columnCount];
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        {
+            for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+            {
+                multiDimensionalArray[rowIndex, columnIndex] = array[rowIndex][columnIndex];
+            }
+        }
+
+        return multiDimensionalArray;
     }
 }

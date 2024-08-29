@@ -275,7 +275,11 @@
 
                 if (this.isGameWon())
                 {
-                    this.$emit('winGame')
+                    this.$emit(
+                        'winGame',
+                        this.board.map(row => 
+                            row.map(cell => cell.value)
+                        ));
                 }
                 else
                 {
