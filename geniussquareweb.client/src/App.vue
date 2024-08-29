@@ -88,6 +88,7 @@
                 return;
               }
 
+              gameRecord.enemyBoard = gameRecord.board;
               this.currentGame = gameRecord;
               this.state = States.WaitingForSecondPlayer;
             },
@@ -98,6 +99,7 @@
                 return;
               }
 
+              this.signalRConnection.on("EnemyUpdate", (gameId: string, enemyBoard: number[][]) => this.enemyUpdate(gameId, enemyBoard));
               this.state = States.Game;
             },
             joinGame(gameRecord: GameData)
@@ -107,6 +109,8 @@
                 return;
               }
 
+              this.signalRConnection.on("EnemyUpdate", (gameId: string, enemyBoard: number[][]) => this.enemyUpdate(gameId, enemyBoard));
+              gameRecord.enemyBoard = gameRecord.board;
               this.currentGame = gameRecord;
               this.state = States.Game;
             },
@@ -133,7 +137,23 @@
                 this.gameOutcome = GameOutcome.Lose;
               }
 
+              this.signalRConnection.off("EnemyUpdate");
               this.state = States.Modal;
+            },
+            async updateBoard(board: number[][])
+            {
+              if (this.state !== States.Game || this.currentGame == null)
+              {
+                return;
+              }
+
+              this.currentGame.board = board;
+              await this.signalRConnection.send("UpdateBoardAsync", this.currentGame.gameGuid, this.currentGame.board)
+              .catch(ex =>
+                  {
+                      console.log(ex);
+                  }
+              );
             },
             loseGame()
             {
@@ -142,8 +162,18 @@
                 return;
               }
 
+              this.signalRConnection.off("EnemyUpdate");
               this.gameOutcome = GameOutcome.Lose;
               this.state = States.Modal;
+            },
+            enemyUpdate(gameId: string, enemyBoard: number[][])
+            {
+              if (this.state !== States.Game || gameId !== this.currentGame?.gameGuid)
+              {
+                return;
+              }
+
+              this.currentGame.enemyBoard = enemyBoard;
             },
             terminateGame()
             {
@@ -187,6 +217,7 @@
         <div v-else-if="state === States.Game">
           <GameManager
           @win-game="winGame"
+          @update-board="(array: number[][]) => updateBoard(array)"
           :current-game="currentGame as GameData">
           </GameManager>
         </div>

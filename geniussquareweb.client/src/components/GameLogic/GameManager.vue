@@ -1,13 +1,17 @@
 <template>
     <div style="width:100%;">
         <div style="width:400px; float:left;">
+        <span style="color: green;">Player board</span>
         <GameBoard v-if="board"
         :boardStates="board"
+        :is-player="true"
         @try-set-figure-on-board="trySetFigureOnBoard"/>  
 
         </div>
         <div style="width:10%; float:right;" class="grid-container" tabindex="-1">
             <div class="gridItem" style="padding-bottom: 20px;">
+                <span>Hold mouse click and drag figures</span>
+                <hr/>
                 <span>E: rotate figure right 90&deg</span>
                 <span>Q: rotate figure left 90&deg</span>
                 <span>D:  flip figure over X axis</span>
@@ -26,18 +30,24 @@
             </div>
         </div>
     </div>
+    <div  style="width:400px; z-index: 5000;" >
+        <span style="color: red;">Enemy board</span>
+            <GameBoard v-if="currentGame.enemyBoard"
+            :is-droppable="false"
+            :boardStates="createEnemyCellMatrix(currentGame.enemyBoard)"/> 
+    </div>
 </template>
 
 <script lang="ts">
     import { defineComponent, type PropType } from 'vue';
+    import  { FigureColors } from './GameTypes';
     import type { FigureDataTransfer, Figure, Cell, GameData } from './GameTypes';
     import GameBoard from './GameBoard.vue';
     import FigureTemplate from './FigureTemplate.vue';
-    import * as signalR from "@microsoft/signalr";
 
     interface Data {
-        connection: signalR.HubConnection | null,
         board: null | Cell[][];
+        enemyBoard: null | Cell[][];
         placedFigureCount: number
         figures: 
         {
@@ -50,7 +60,7 @@
             GameBoard,
             FigureTemplate
         },
-        emits: ["winGame"],
+        emits: ["winGame", "updateBoard"],
         props: {
             currentGame: {
                 type: Object as PropType<GameData>,
@@ -59,12 +69,13 @@
         },
         data(): Data {
             return {
-                connection: null,
                 board: null,
+                enemyBoard: null,
                 placedFigureCount : 0,
                 figures: {
                     monomino: {
-                        color: 'lightgreen',
+                        value: 1,
+                        color: FigureColors[0],
                         cellMatrix: [
                             [1],
                         ],
@@ -72,7 +83,8 @@
                         placedCellIndexes: null,
                     },
                     domino: {
-                        color: 'lightblue',
+                        value: 2,
+                        color: FigureColors[1],
                         cellMatrix: [
                             [1],
                             [1],  
@@ -81,7 +93,8 @@
                         placedCellIndexes: null,
                     },
                     trominoL: {
-                        color: 'purple',
+                        value: 3,
+                        color: FigureColors[2],
                         cellMatrix: [
                             [1, 0],
                             [1, 1],  
@@ -90,7 +103,8 @@
                         placedCellIndexes: null,
                     },
                     trominoI: {
-                        color: 'pink',
+                        value: 4,
+                        color: FigureColors[3],
                         cellMatrix: [
                             [1],
                             [1],
@@ -100,7 +114,8 @@
                         placedCellIndexes: null,
                     },
                     tetrominoSquare: {
-                        color: 'orange',
+                        value: 5,
+                        color: FigureColors[4],
                         cellMatrix: [
                             [1, 1],
                             [1, 1],  
@@ -109,7 +124,8 @@
                         placedCellIndexes: null,
                     },
                     tetrominoL: {
-                        color: 'green',
+                        value: 6,
+                        color: FigureColors[5],
                         cellMatrix: [
                             [1, 0],
                             [1, 0],
@@ -119,7 +135,8 @@
                         placedCellIndexes: null,
                     },
                     tetrominoZ: {
-                        color: 'red',
+                        value: 7,
+                        color: FigureColors[6],
                         cellMatrix: [
                             [0, 1, 1],
                             [1, 1, 0],    
@@ -128,7 +145,8 @@
                         placedCellIndexes: null,
                     },
                     tetrominoT: {
-                        color: 'brown',
+                        value: 8,
+                        color: FigureColors[7],
                         cellMatrix: [
                             [0, 1, 0],
                             [1, 1, 1],    
@@ -137,7 +155,8 @@
                         placedCellIndexes: null,
                     },
                     tetrominoI: {
-                        color: 'darkgrey',
+                        value: 9,
+                        color: FigureColors[8],
                         cellMatrix: [
                             [1],
                             [1],
@@ -160,6 +179,28 @@
                     figureId: "",
                     value: value,
                     color: "white"}))
+                );
+            },
+            createEnemyCellMatrix(numbers: number[][]): Cell[][] {
+                return numbers.map(row => 
+                    row.map(value =>
+                        {
+                            if (value > 0)
+                            {
+                                return (
+                                    {
+                                    figureId: "",
+                                    value: value,
+                                    color: FigureColors[value-1] // enemy figure values start from 1 so this is needed
+                                    })
+                            }
+                            return ({
+                                figureId: "1",
+                                value: value,
+                                color: "white"
+                            })
+                        }
+                    )
                 );
             },
             async selectedFigure(id: string)
@@ -192,6 +233,11 @@
                 }
 
                 this.figures[id].placedCellIndexes = null;
+                this.$emit(
+                    'updateBoard',
+                    this.board.map(row => 
+                        row.map(cell => cell.value)
+                    ));
             },
             trySetFigureOnBoard(cellMatrixRowIndex: number, cellMatrixColumnIndex: number, data: FigureDataTransfer ) {
                 if (this.board == null)
@@ -210,7 +256,7 @@
                 let rowCount = data.figure.cellMatrix.length;
                 let columnCount = data.figure.cellMatrix[0].length;
 
-                this.figures[data.figureId].placedCellIndexes = new Array();
+                var newFigureCellPlacements = new Array();
 
                 for (let i = startingRowIndex ; i < startingRowIndex+rowCount; i++ )
                 {
@@ -218,17 +264,26 @@
                     {
                         if(data.figure.cellMatrix[i - startingRowIndex][j - startingColumnIndex] === 1)
                         {
-                            this.board[i][j].value = 1;
+                            this.board[i][j].value = data.figure.value;
                             this.board[i][j].color = data.figure.color;
                             this.board[i][j].figureId = data.figureId;
-                            this.figures[data.figureId].placedCellIndexes.push([i,j]);
+                            newFigureCellPlacements.push([i,j]);
                         }
                     }
                 }
+                this.figures[data.figureId].placedCellIndexes = newFigureCellPlacements;
 
                 if (this.isGameWon())
                 {
                     this.$emit('winGame')
+                }
+                else
+                {
+                    this.$emit(
+                        'updateBoard',
+                        this.board.map(row => 
+                            row.map(cell => cell.value)
+                        ));
                 }
 
             },

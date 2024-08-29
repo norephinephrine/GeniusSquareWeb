@@ -11,21 +11,26 @@
             </li>
         </ul>
         <button
-            class="buttonPlayer"
+            class="playerButton"
             @click="createGameRoom">
             New game (Player)
         </button>
     </div>
     <br/>
-    <div>
+    <div style="width:800px;">
         <button 
-            class="buttonBot1"
+            class="botButton easyBotButton"
             @click="createGameRoomBot(0)">
             New game (Easy Bot)
         </button>
         <button 
-            class="buttonBot2"
+            class="botButton mediumBotButton"
             @click="createGameRoomBot(1)">
+            New game (Medium Bot)
+        </button>
+        <button 
+            class="botButton hardBotButton"
+            @click="createGameRoomBot(2)">
             New game (Hard Bot)
         </button>
     </div>
@@ -37,6 +42,7 @@
     import type { GameData } from "./GameLogic/GameTypes";
 
     export default defineComponent({
+        emits: ["createGame", "joinGame"],
         props: {
             gameInstanceList : Array<string>,
             signalRConnection :
@@ -117,7 +123,7 @@
 ul{height:400px; width:400px;}
 ul{overflow:hidden; overflow-y:scroll;}
 
-.buttonPlayer {
+.playerButton {
     background-color: green;
     color: white;
     border: none;
@@ -128,8 +134,8 @@ ul{overflow:hidden; overflow-y:scroll;}
     transition: background-color 0.3s ease;
 }
 
-.buttonBot1 {
-    background-color: orange;
+.botButton
+{
     color: white;
     border: none;
     padding: 10px 20px;
@@ -140,29 +146,35 @@ ul{overflow:hidden; overflow-y:scroll;}
     margin-right: 10px;
 }
 
-.buttonBot2 {
-    background-color: rgb(255, 140, 0);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.easyBotButton {
+    background-color: orange;
+}
+
+.mediumBotButton {
+    background-color: rgb(255, 120, 0);
+}
+
+.hardBotButton {
+    background-color: rgb(255, 100, 0);
 }
 
 /* Hover state */
-.buttonPlayer:hover {
+.playerButton:hover {
     background-color: darkgreen;
 }
 
 /* Hover state */
-.buttonBot1:hover {
+.easyBotButton:hover {
     background-color: rgb(187, 106, 8);
 }
 
 /* Hover state */
-.buttonBot2:hover {
+.mediumBotButton:hover {
+    background-color: rgb(187, 106, 8);
+}
+
+/* Hover state */
+.hardBotButton:hover {
     background-color: rgb(187, 106, 8);
 }
 

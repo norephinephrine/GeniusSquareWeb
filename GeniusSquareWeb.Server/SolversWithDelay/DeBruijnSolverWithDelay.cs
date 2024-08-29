@@ -1,47 +1,75 @@
 ﻿using GeniusSquareWeb.GameElements.Figures;
+using GeniusSquareWeb.Server.SolversWithDelay;
 
-namespace GeniusSquareWeb.GameSolvers.DeBruijn
+namespace GeniusSquareWeb.Server.SolversWithDelay
 {
     /// <summary>
-    /// De Bruijn solver.
+    /// Version of DeBruijnSolver with delay
     /// </summary>
-    public class DeBruijnSolver : IGameSolver
+    public class DeBruijnSolverWithDelay
     {
         private const int FigureCount = 9;
 
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
-        /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        private Func<int[,], Task<bool>> hubCallback;
+
+        public DeBruijnSolverWithDelay(
+            Func<int[,], Task<bool>> callback)
+        {
+            this.hubCallback = callback;
+        }
+
+        /// <summary>
+        /// Solve board utilising De Bruijn with delay between iterations.
+        /// </summary>
+        /// <param name="board">Starting board.</param>
+        /// <param name="delay">Delay between iterations</param>
+        /// <returns></returns>
+        public async Task<bool> Solve(
+            int[,] board,
+            TimeSpan delay)
         {
             int[,] iteratingBoard = board;
             bool[] isFigurePlaced = new bool[FigureCount];
 
-
-            int numberOfIterations = 0;
-            bool result = SolverHelper(
-                iteratingBoard,
-                isFigurePlaced,
-                ref numberOfIterations);
-            if (result != true)
+            try
             {
+                bool result = await SolveWithDelayHelperAsync(
+                    iteratingBoard,
+                    isFigurePlaced,
+                    delay);
 
-                throw new Exception("De Bruijn solver should have solved the game. Instead it failed");
+                if (result != true)
+                {
+                    throw new Exception("De Bruijn solver should have solved the game. Instead it failed");
+                }
+
+                return true;
             }
-
-            return new SolverResult
+            catch (GameOverException ex)
             {
-                SolvedBoard = board,
-                NumberOfIterations = numberOfIterations
-            };
+                return false;
+            }
         }
 
-        private bool SolverHelper(
+        /// <summary>
+        /// An async version of SolverHelper from DeBruijnSolver with delay between iterations.
+        /// 
+        /// Made this its own method instead of modifying the abouve mentioned method
+        /// to keep the default De Bruijn clean from async logic.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> SolveWithDelayHelperAsync(
             int[,] board,
             bool[] isFigurePlaced,
-            ref int numberOfIterations)
+            TimeSpan delay)
         {
-            numberOfIterations++;
+            await Task.Delay(delay);
+            if (!await this.hubCallback(board))
+            {
+                throw new GameOverException("Game is over");
+            }
 
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
@@ -126,7 +154,7 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
 
                     // next figure placement start
                     isFigurePlaced[figureIndex] = true;
-                    if (SolverHelper(board, isFigurePlaced, ref numberOfIterations))
+                    if (await SolveWithDelayHelperAsync(board, isFigurePlaced, delay))
                     {
                         return true;
                     }

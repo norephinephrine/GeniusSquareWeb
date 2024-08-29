@@ -11,6 +11,11 @@
         public Guid GameId { get; }
 
         /// <summary>
+        /// Flag that indicates whether the game is active.
+        /// </summary>
+        public bool IsGameActive { get; }
+
+        /// <summary>
         /// Gets value indicating whether current game is available to join.;
         /// </summary>
         /// <returns></returns>

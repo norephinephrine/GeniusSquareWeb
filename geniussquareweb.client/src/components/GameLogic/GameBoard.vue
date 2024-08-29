@@ -6,7 +6,7 @@
             <div v-for="(cell, columnIndex) in row" 
                 :key="columnIndex" 
                 :class="`cell`"
-                :style="{ backgroundColor: cell.color }"
+                :style="{ backgroundColor: cell.color,   opacity: !isPlayer ? 0.5 : 1 }"
                 @dragenter="(event:any) => dragEnter(event)"
                 @dragover="(event:any) => dragOver(event)"
                 @drop="(event:any) => drop(event, rowIndex, columnIndex)">
@@ -22,17 +22,24 @@
 
     export default defineComponent({
         props: {
-            boardStates: Array<Array<Cell>>
+            boardStates: Array<Array<Cell>>,
+            isPlayer: Boolean
         },
         methods: {
             dragEnter(ev:any) {
-                ev.preventDefault();
+                if (this.isPlayer)
+                {
+                    ev.preventDefault();
+                }
             },
             dragOver(ev:any) {
-                ev.preventDefault();
+                if (this.isPlayer)
+                {
+                    ev.preventDefault();
+                }
             },
             drop(ev:any, rowIndex: number, columnIndex: number) {
-                if (this.boardStates == null || ev.dataTransfer?.getData("figureData") === "")
+                if (!this.isPlayer ||this.boardStates == null || ev.dataTransfer?.getData("figureData") === "")
                 {
                     return
                 }

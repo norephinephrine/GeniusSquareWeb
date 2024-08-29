@@ -1,25 +1,37 @@
 ﻿using GeniusSquareWeb.GameElements;
 using GeniusSquareWeb.GameElements.Figures;
+using GeniusSquareWeb.GameSolvers.DancingLinks;
+using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 
-namespace GeniusSquareWeb.GameSolvers.DancingLinks
+namespace GeniusSquareWeb.Server.SolversWithDelay
 {
     /// <summary>
-    /// Dancing link solver utilising algorithm X.
+    /// Dancing link solver utilising algorithm X with delay.
     /// </summary>
-    public class DlxSolver : IGameSolver
+    public class DlxSolverWithDelay
     {
         private const int FigureCount = GameConstants.FigureCount;
         private Figure[] figureList = DefaultFigures.FigureList;
 
         private Node root;
         private Node[] placedFigure = new Node[FigureCount];
-        public DlxSolver(Node root)
+        private Func<int[,], Task<bool>> hubCallback;
+
+        public DlxSolverWithDelay(Func<int[,], Task<bool>> callback)
         {
-            this.root = root;
+            this.hubCallback = callback;
+            this.root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
         }
 
-        /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        /// <summary>
+        /// Solve board utilising De Bruijn with delay between iterations.
+        /// </summary>
+        /// <param name="board">Starting board.</param>
+        /// <param name="delay">Delay between iterations</param>
+        /// <returns></returns>
+        public async Task<bool> Solve(
+            int[,] board,
+            TimeSpan delay)
         {
             // reduce dancing links
             Node current = root.Right;
@@ -44,41 +56,40 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             }
 
             int numberOfIterations = 0;
-            if (!DlxIteration(0, ref numberOfIterations))
+            try
             {
-                throw new Exception("Dlx solver should have solved the game. Instead it failed");
+                bool result = await DlxIterationWithDelayAsync(0, board, delay);
 
-            }
-
-            PlaceFiguresOnBoard(board, placedFigure);
-
-            for (int i = FigureCount - 1; i >= 0; i--)
-            {
-                current = placedFigure[i];
-
-                do
+                if (result != true)
                 {
-                    current = current.Left;
-                    UncoverNode(current.ColumnHead);
+                    throw new Exception("Dlx solver should have solved the game. Instead it failed");
                 }
-                while (current != placedFigure[i]);
-            }
 
-            foreach (Node node in nodes)
-            {
-                UncoverNode(node.ColumnHead);
+                return true;
             }
-
-            return new SolverResult
+            catch (GameOverException ex)
             {
-                SolvedBoard = board,
-                NumberOfIterations = numberOfIterations
-            };
+                return false;
+            }
         }
 
-        private bool DlxIteration(int k, ref int numberOfIterations)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="k"></param>
+        /// <param name="board"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        private async Task<bool> DlxIterationWithDelayAsync(
+            int k,
+            int[,] board,
+            TimeSpan delay)
         {
-            numberOfIterations++;
+            await Task.Delay(delay);
+            int[,] cloneBoard = (int[,])board.Clone();
+            PlaceFiguresOnBoard(cloneBoard, placedFigure);
+            await this.hubCallback(cloneBoard);
+
             if (root.Right == root)
             {
                 return true;
@@ -103,7 +114,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     j = j.Right;
                 }
 
-                if (DlxIteration(k + 1, ref numberOfIterations))
+                if (await DlxIterationWithDelayAsync(k + 1,board, delay))
                 {
                     return true;
                 }
@@ -115,6 +126,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     j = j.Left;
                 }
 
+                placedFigure[k] = null;
                 r = r.Down;
             }
 
@@ -205,8 +217,14 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
         {
             const int offset = GameConstants.DancingLinkFigureOffset;
 
+            // place figures
             foreach (Node figure in placedFigure)
             {
+                if (figure == null)
+                {
+                    continue;
+                }    
+
                 // get figure value
                 int value = figure.ColumnHead.Value - offset;
                 Node startingNode = figure;
@@ -233,17 +251,6 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     i = i.Right;
                 }
             }
-        }
-
-        public class Node
-        {
-            public Node Left;
-            public Node Right;
-            public Node Up;
-            public Node Down;
-            public Node ColumnHead;
-            public int Size;
-            public int Value;
         }
     }
 }

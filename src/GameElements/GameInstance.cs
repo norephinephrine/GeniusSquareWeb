@@ -10,12 +10,12 @@
         private const int MaxPlayerCount = GameConstants.MaxPlayerCount;
         private GameBoard board;
         private List<string> players = new List<string>();
-        private bool isGameActive = true;
 
         public GameInstance(Guid gameId, GameBoard board)
         {
             this.board = board;
             this.GameId = gameId;
+            this.IsGameActive = true;
         }
 
         /// <summary>
@@ -27,6 +27,11 @@
         /// Get game id.
         /// </summary>
         public Guid GameId { get; private set; }
+
+        /// <summary>
+        /// Get game id.
+        /// </summary>
+        public bool IsGameActive { get; private set; }
 
         /// <inheritdoc/>
         public int[,] GetInitialBoardState()
@@ -48,12 +53,12 @@
         {
             lock (mutex)
             {
-                if (!this.isGameActive)
+                if (!this.IsGameActive)
                 {
                     return false;
                 }
 
-                this.isGameActive = false;
+                this.IsGameActive = false;
             }
 
             return true;

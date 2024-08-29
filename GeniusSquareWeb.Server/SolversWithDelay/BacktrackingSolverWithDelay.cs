@@ -1,44 +1,68 @@
 ﻿using GeniusSquareWeb.GameElements.Figures;
 
-namespace GeniusSquareWeb.GameSolvers.Backtracking
+namespace GeniusSquareWeb.Server.SolversWithDelay
 {
     /// <summary>
-    /// Bactracking solver.
+    /// Version of Backtracking solver with delay
     /// </summary>
-    public class BacktrackingSolver : IGameSolver
+    public class BacktrackingSolverWithDelay
     {
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
-        /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        private Func<int[,], Task<bool>> hubCallback;
+        public BacktrackingSolverWithDelay(
+            Func<int[,], Task<bool>> callback)
+        {
+            this.hubCallback = callback;
+        }
+
+        /// <summary>
+        /// Solve board utilising Backtracking with delay between iterations.
+        /// </summary>
+        /// <param name="board">Starting board.</param>
+        /// <param name="delay">Delay between iterations</param>
+        /// <returns></returns>
+        public async Task<bool> Solve(
+            int[,] board,
+            TimeSpan delay)
         {
             int[,] iteratingBoard = board;
             int figureIndex = 0;
 
-            int iterationCount = 0;
-            bool result = SolverHelper(
-                iteratingBoard,
-                figureIndex,
-                ref iterationCount);
-
-            if (result != true)
+            try
             {
-                throw new Exception("Backtracking solver should have solved the game. Instead it failed");
+                bool result = await SolveWithDelayHelperAsync(
+                    iteratingBoard,
+                    figureIndex,
+                    delay);
+
+                if (result != true)
+                {
+                    throw new Exception("Backtracking solver should have solved the game. Instead it failed");
+                }
+
+                return true;
             }
-
-            return new SolverResult
+            catch (GameOverException ex)
             {
-                SolvedBoard = board,
-                NumberOfIterations = iterationCount,
-            };
+                return false;
+            }
         }
 
-        private bool SolverHelper(
+        /// <summary>
+        /// An async version of BacktrackingSolver.SolverHelper with delay between iterations.
+        /// 
+        /// This its own method instead of unifying with the abouve mentioned method
+        /// to keep the default De Bruijn clean from async logic.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> SolveWithDelayHelperAsync(
             int[,] board,
             int figureIndex,
-            ref int iterationCount)
+            TimeSpan delay)
         {
-            iterationCount++;
+            await Task.Delay(delay);
+            await this.hubCallback(board);
 
             IEnumerable<int[,]> figureOrientationList = figureList[figureIndex];
             int rowCount = board.GetLength(0);
@@ -99,7 +123,7 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
 
                         // if last figureIndex return true, else try to solve it further.
                         if (figureIndex == 8
-                            || SolverHelper(board, figureIndex + 1, ref iterationCount))
+                            || await SolveWithDelayHelperAsync(board, figureIndex + 1, delay))
                         {
                             return true;
                         }

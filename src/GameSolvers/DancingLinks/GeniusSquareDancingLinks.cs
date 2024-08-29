@@ -16,7 +16,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
 
         private const int NodeColumnCount = GameConstants.NodeColumnCountDancingLinks;
 
-        public static Node GenerateBoard()
+        public static Node GenerateDancingLinksRoot()
         {
             int[,] board = new int[BoardColumnCount, BoardColumnCount];
 

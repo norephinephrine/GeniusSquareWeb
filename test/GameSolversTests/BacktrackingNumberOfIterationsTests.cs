@@ -37,7 +37,7 @@ namespace GameSolversTests
             DeBruijnSolver deBruijnSolver = new();
             BacktrackingSolver backtrackingSolver = new();
 
-            Node root = GeniusSquareDancingLinks.GenerateBoard();
+            Node root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
             DlxSolver dlxSolver = new DlxSolver(root);
 
             Parallel.For(0, n, (int i) =>
