@@ -4,7 +4,7 @@ using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 
 namespace GeniusSquareWeb.GameSolvers.DancingLinks
 {
-    public static class GeniusSquareDancingLinks
+    public static class DancingLinksHelper
     {
         private const int Offset = GameConstants.DancingLinkFigureOffset;
         private const int FigureCount = GameConstants.FigureCount;
@@ -149,42 +149,15 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             firstNode.Left = root;
             root.Value = 9999;
 
-            // print board if needed
-            // PrintNodeBoard(nodeMatrix);
+            // print figure placement count
+            //Node current = root.Right;
+            //while (current != root)
+            //{
+            //    Console.WriteLine($"FigureId:{current.Value - Offset}, Size: {current.Size}");
+            //    current = current.Right;
+            //}
 
             return root;
-        }
-
-        private static void PrintNodeBoard(Node[,] board)
-        {
-            for (int j = 0; j < board.GetLength(1); j++)
-            {
-                Console.Write($"{board[0, j].Value,5}");
-            }
-            Console.WriteLine();
-
-            for (int j = 0; j < board.GetLength(1); j++)
-            {
-                Console.Write($"{board[0, j].Size,5}");
-            }
-            Console.WriteLine();
-
-
-            for (int i = 1; i < board.GetLength(0); i++)
-            {
-                for (int j = 0; j < board.GetLength(1); j++)
-                {
-                    if (board[i, j] != null)
-                    {
-                        Console.Write($"{1,5}");
-                    }
-                    else
-                    {
-                        Console.Write($"{0,5}");
-                    }
-                }
-                Console.WriteLine();
-            }
         }
     }
 }

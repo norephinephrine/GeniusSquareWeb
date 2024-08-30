@@ -30,7 +30,7 @@ namespace GeniusSquareWeb.SolverBenchmark
 
             BacktrackingSolver = new BacktrackingSolver();
             DeBruijnSolver = new DeBruijnSolver();
-            DlxSolver = new DlxSolver(GeniusSquareDancingLinks.GenerateDancingLinksRoot());
+            DlxSolver = new DlxSolver(DancingLinksHelper.GenerateDancingLinksRoot());
 
             BopLinearSolver = new LinearSolver(new BopIlpSolver());
             ScipLinearSolver = new LinearSolver(new ScipIlpSolver());

@@ -20,7 +20,7 @@ namespace GeniusSquareWeb.Server.SolversWithDelay
         public DlxSolverWithDelay(Func<int[,], Task<bool>> callback)
         {
             this.hubCallback = callback;
-            this.root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
+            this.root = DancingLinksHelper.GenerateDancingLinksRoot();
         }
 
         /// <summary>

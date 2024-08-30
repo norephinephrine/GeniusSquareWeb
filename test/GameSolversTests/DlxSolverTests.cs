@@ -22,7 +22,7 @@ namespace GameSolversTests
         public void ValidateBoardGeneration()
         {
             // given
-            Node root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
+            Node root = DancingLinksHelper.GenerateDancingLinksRoot();
             int count = 0;
 
             // when & then
@@ -47,7 +47,7 @@ namespace GameSolversTests
             GameInstance gameInstance = gameManager.TryCreateGame();
 
             GameBoard gameBoard = gameInstance.Board;
-            Node root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
+            Node root = DancingLinksHelper.GenerateDancingLinksRoot();
             DlxSolver solver = new DlxSolver(root);
 
             // when
@@ -65,7 +65,7 @@ namespace GameSolversTests
         public void ValidateAllSolution()
         {
             // given
-            Node root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
+            Node root = DancingLinksHelper.GenerateDancingLinksRoot();
             DlxSolver solver = new DlxSolver(root);
 
             // when and then
@@ -83,7 +83,7 @@ namespace GameSolversTests
             GameInstance gameInstance1 = gameManager.TryCreateGame();
             GameInstance gameInstance2 = gameManager.TryCreateGame();
 
-            Node root = GeniusSquareDancingLinks.GenerateDancingLinksRoot();
+            Node root = DancingLinksHelper.GenerateDancingLinksRoot();
             DlxSolver solver = new DlxSolver(root);
 
             // when
