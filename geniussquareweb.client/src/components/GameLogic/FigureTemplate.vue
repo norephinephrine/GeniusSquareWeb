@@ -32,6 +32,7 @@ import { flipOverXAxis, flipOverYAxis, rotateLeft, rotateRight } from './FigureT
 import { enableDragDropTouch } from "./drag-drop-touch.esm.min.js";
 
 export default defineComponent({
+  expose: ['rotateFigureRight', 'rotateFigureLeft', 'flipFigureOverYAxis', 'flipFigureOverXAxis'],
   data() {
     return {
       selectedCellRowIndex : 0,
@@ -72,35 +73,42 @@ export default defineComponent({
     transformFiguretOnKeyPress(event:KeyboardEvent)
       {
         if (event.key === 'e' || event.key === 'E') {
-          this.figure.cellMatrix = rotateRight(this.figure.cellMatrix);
+          this.rotateFigureRight()
           return;
         }
 
         if (event.key === 'q' || event.key === 'Q') {
-          this.figure.cellMatrix = rotateLeft(this.figure.cellMatrix);
+          this.rotateFigureLeft()
           
           return;
         }
         if (event.key === 'f' || event.key === 'F') {
-          this.figure.cellMatrix = flipOverYAxis(this.figure.cellMatrix);
-          
+          this.flipFigureOverYAxis()          
           return;
         }
 
         if (event.key === 'd' || event.key === 'D') {
-          this.figure.cellMatrix = flipOverXAxis(this.figure.cellMatrix);
+          this.flipFigureOverXAxis()          
           
           return;
         }
-      }
-    // decreaseOpacity(event:Event)
-    // {
-    //   this.isMouseDown = true;
-    // },
-    // increaseOpacity(event:Event)
-    // {
-    //   this.isMouseDown = false;
-    // }
+      },
+    rotateFigureRight()
+    {
+      this.figure.cellMatrix = rotateRight(this.figure.cellMatrix);
+    },
+    rotateFigureLeft()
+    {
+      this.figure.cellMatrix = rotateLeft(this.figure.cellMatrix);
+    },
+    flipFigureOverYAxis()
+    {
+      this.figure.cellMatrix = flipOverYAxis(this.figure.cellMatrix);
+    },
+    flipFigureOverXAxis()
+    {
+      this.figure.cellMatrix = flipOverXAxis(this.figure.cellMatrix);
+    },
   },
 });
 </script>
@@ -133,12 +141,12 @@ export default defineComponent({
 
 .button-reset {
   border: 5px solid black;
-  height: 50px;
-  width: 100px;
-  font-size: 30px;
-  margin-bottom: 10px;
-  transition-duration: 0.4s;
-  background-color: white;
+    height: 50px;
+    width: 100px;
+    font-size: 30px;
+    margin-bottom: 10px;
+    transition-duration: 0.4s;
+    background-color: white;
 }
 
 .button-reset:hover {

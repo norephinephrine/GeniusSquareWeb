@@ -23,14 +23,36 @@
             :key="figureKey"
             class="grid-item">
             <FigureTemplate 
-            :figure="figure"
-            :figureId="figureKey"
-            @selected-figure="selectedFigure"
-            @reset-figure="resetFigure"/>
+                :figure="figure"
+                :figureId="figureKey"
+                @selected-figure="selectedFigure"
+                @reset-figure="resetFigure"
+                :ref="figureKey as string"/>
             </div>
+            <button 
+                class="button-transformation"
+                @click="rotateFigureRight()">
+                E
+            </button>
+            <button 
+                class="button-transformation"
+                @click="rotateFigureLeft()">
+                Q
+            </button>
+            <button style="visibility: hidden"></button>
+            <button 
+                class="button-transformation"
+                @click="flipFigureOverXAxis()">
+                D
+            </button>
+            <button 
+                class="button-transformation"
+                @click="flipFigureOverYAxis()">
+                F
+            </button>
         </div>
     </div>
-    <div  style="width:400px; z-index: 5000;" >
+    <div  style="width:400px;" >
         <span style="color: red;">Enemy board</span>
             <GameBoard v-if="currentGame.enemyBoard"
             :is-droppable="false"
@@ -47,6 +69,7 @@
 
     interface Data {
         board: null | Cell[][];
+        selectedFigureId: string
         enemyBoard: null | Cell[][];
         placedFigureCount: number
         figures: 
@@ -72,6 +95,7 @@
                 board: null,
                 enemyBoard: null,
                 placedFigureCount : 0,
+                selectedFigureId : "",
                 figures: {
                     monomino: {
                         value: 1,
@@ -215,6 +239,8 @@
                         this.figures[key].opacity = 1
                     }
                 }
+
+                this.selectedFigureId = id;
             },
             resetFigure(id: string)
             {
@@ -238,6 +264,8 @@
                     this.board.map(row => 
                         row.map(cell => cell.value)
                     ));
+
+                this.selectedFigureId = "";
             },
             trySetFigureOnBoard(cellMatrixRowIndex: number, cellMatrixColumnIndex: number, data: FigureDataTransfer ) {
                 if (this.board == null)
@@ -272,6 +300,7 @@
                     }
                 }
                 this.figures[data.figureId].placedCellIndexes = newFigureCellPlacements;
+                this.selectedFigureId = "";
 
                 if (this.isGameWon())
                 {
@@ -289,7 +318,6 @@
                             row.map(cell => cell.value)
                         ));
                 }
-
             },
             isValidPlacement(
                 board: Cell[][],
@@ -334,6 +362,62 @@
 
                 return true;
             },
+            rotateFigureLeft()
+            {
+                if (this.selectedFigureId === "")
+                {
+                    return;
+                }
+      
+                const childComponent = (this.$refs[this.selectedFigureId] as typeof FigureTemplate[])[0];
+
+                if(childComponent)
+                {
+                    childComponent.rotateFigureLeft();
+                }
+            },
+            rotateFigureRight()
+            {
+                if (this.selectedFigureId === "")
+                {
+                    return;
+                }
+
+                const childComponent = (this.$refs[this.selectedFigureId] as typeof FigureTemplate[])[0];
+
+                if(childComponent)
+                {
+                    childComponent.rotateFigureRight();
+                }
+            },
+            flipFigureOverXAxis()
+            {
+                if (this.selectedFigureId === "")
+                {
+                    return;
+                }
+
+                const childComponent = (this.$refs[this.selectedFigureId] as typeof FigureTemplate[])[0];
+
+                if(childComponent)
+                {
+                    childComponent.flipFigureOverXAxis();
+                }
+            },
+            flipFigureOverYAxis()
+            {
+                if (this.selectedFigureId === "")
+                {
+                    return;
+                }
+
+                const childComponent = (this.$refs[this.selectedFigureId] as typeof FigureTemplate[])[0];
+
+                if(childComponent)
+                {
+                    childComponent.flipFigureOverYAxis();
+                }
+            },
         },
     });
 </script>
@@ -348,6 +432,24 @@
   z-index: 1;
   width: 200px;
   height: 200px;
+}
+
+.button-transformation
+{
+    z-index: 2;
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.button-transformation:hover {
+    background-color: darkgreen;
 }
 
 span {

@@ -114,7 +114,7 @@
               this.currentGame = gameRecord;
               this.state = States.Game;
             },
-            async winGame(board)
+            async winGame(board: number[][])
             {
               if (this.state !== States.Game || this.currentGame == null)
               {

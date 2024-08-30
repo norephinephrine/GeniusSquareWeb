@@ -10,6 +10,7 @@
                 </button>
             </li>
         </ul>
+        <h1 style="color: darkgreen;"> Create new game</h1>
         <button
             class="playerButton"
             @click="createGameRoom">
@@ -18,20 +19,21 @@
     </div>
     <br/>
     <div style="width:800px;">
+        <h1 style="color: darkgreen;"> Play versus bot (minimum game length 30s)</h1>
         <button 
-            class="botButton easyBotButton"
+            class="botButton backtrackingBot"
             @click="createGameRoomBot(0)">
-            New game (Easy Bot)
+            New game (Backtracking)
         </button>
         <button 
-            class="botButton mediumBotButton"
+            class="botButton dlxBot"
             @click="createGameRoomBot(1)">
-            New game (Medium Bot)
+            New game (Dancing links + Alg X)
         </button>
         <button 
-            class="botButton hardBotButton"
+            class="botButton deBruijnBot"
             @click="createGameRoomBot(2)">
-            New game (Hard Bot)
+            New game (De Bruijn)
         </button>
     </div>
 </template>
@@ -146,15 +148,15 @@ ul{overflow:hidden; overflow-y:scroll;}
     margin-right: 10px;
 }
 
-.easyBotButton {
+.backtrackingBot {
     background-color: orange;
 }
 
-.mediumBotButton {
+.dlxBot {
     background-color: rgb(255, 120, 0);
 }
 
-.hardBotButton {
+.deBruijnBot {
     background-color: rgb(255, 100, 0);
 }
 
@@ -164,17 +166,17 @@ ul{overflow:hidden; overflow-y:scroll;}
 }
 
 /* Hover state */
-.easyBotButton:hover {
+.backtrackingBot:hover {
     background-color: rgb(187, 106, 8);
 }
 
 /* Hover state */
-.mediumBotButton:hover {
+.dlxBot:hover {
     background-color: rgb(187, 106, 8);
 }
 
 /* Hover state */
-.hardBotButton:hover {
+.deBruijnBot:hover {
     background-color: rgb(187, 106, 8);
 }
 
