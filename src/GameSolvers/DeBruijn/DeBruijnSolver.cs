@@ -46,7 +46,7 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
 
-            Tuple<int, int>? holeIndex = FindNextEmptyHole(board);
+            Tuple<int, int>? holeIndex = FindNextEmptyCell(board);
             if (holeIndex == null)
             {
                 return true;
@@ -153,10 +153,17 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
             return false;
         }
 
-        private Tuple<int, int>? FindNextEmptyHole(int[,] board)
+        /// <summary>
+        /// Find next empty cell to fill.
+        /// </summary>
+        /// <param name="board">Game board.</param>
+        /// <returns></returns>
+        private Tuple<int, int>? FindNextEmptyCell(int[,] board)
         {
+            // column
             for (int j = 0; j < board.GetLength(1); j++)
             {
+                // row
                 for (int i = 0; i < board.GetLength(0); i++)
                 {
                     if (board[i, j] == 0)
