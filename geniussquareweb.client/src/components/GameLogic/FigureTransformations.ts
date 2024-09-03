@@ -1,4 +1,4 @@
-export function rotateLeft(oldMatrix:number[][]) : number[][]
+export function rotateRight(oldMatrix:number[][]) : number[][]
 {
 
   let oldColumnCount = oldMatrix[0].length;
@@ -29,7 +29,7 @@ export function rotateLeft(oldMatrix:number[][]) : number[][]
   return newMatrix;
 };
 
-export function  rotateRight(oldMatrix:number[][]) : number[][]
+export function  rotateLeft(oldMatrix:number[][]) : number[][]
 {
   let oldColumnCount = oldMatrix[0].length;
   let oldRowCount = oldMatrix.length

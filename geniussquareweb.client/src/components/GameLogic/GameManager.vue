@@ -12,8 +12,8 @@
             <div class="gridItem" style="padding-bottom: 20px;">
                 <span>Hold mouse click and drag figures</span>
                 <hr/>
-                <span>E: rotate figure right 90&deg</span>
                 <span>Q: rotate figure left 90&deg</span>
+                <span>E: rotate figure right 90&deg</span>
                 <span>D:  flip figure over X axis</span>
                 <span>F:  flip figure over Y axis</span>
             </div>
@@ -31,13 +31,13 @@
             </div>
             <button 
                 class="button-transformation"
-                @click="rotateFigureRight()">
-                E
+                @click="rotateFigureLeft()">
+                Q
             </button>
             <button 
                 class="button-transformation"
-                @click="rotateFigureLeft()">
-                Q
+                @click="rotateFigureRight()">
+                E
             </button>
             <button style="visibility: hidden"></button>
             <button 
