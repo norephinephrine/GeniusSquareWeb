@@ -10,7 +10,6 @@ namespace GameSolversTests
         private const int EmptySpaceValue = 0;
         private const int GameSolutionCount = 62208; // Genius Square has 62208 possible board combinations.
 
-
         /// <summary>
         /// Validate all game solutions.
         /// </summary>
@@ -36,7 +35,7 @@ namespace GameSolversTests
                     GameBoard gameBoard = new GameBoard();
                     gameBoard.SetGameBoardField(firstDice.ElementAt(index), BlockerValue);
 
-                    ValidateAllGameSolutionHelper(
+                    ValidateAllGameBoardsHelper(
                         dicesWithDistinctSides,
                         1, // start at one due to initial loop from Parallel.For
                         dicesWithDistinctSides.Count() - 1,
@@ -48,7 +47,7 @@ namespace GameSolversTests
             else
             {
                 GameBoard gameBoard = new GameBoard();
-                ValidateAllGameSolutionHelper(
+                ValidateAllGameBoardsHelper(
                     dicesWithDistinctSides,
                     0,
                     dicesWithDistinctSides.Count() - 1,
@@ -61,7 +60,7 @@ namespace GameSolversTests
             Assert.AreEqual(GameSolutionCount, solutionsFound);
         }
 
-        private static void ValidateAllGameSolutionHelper (
+        private static void ValidateAllGameBoardsHelper (
             IEnumerable<IEnumerable<GameBoardField>> dices,
             int currentIndex,
             int maxIndex,
@@ -75,11 +74,11 @@ namespace GameSolversTests
 
                 if (currentIndex != maxIndex)
                 {
-                    ValidateAllGameSolutionHelper(dices, currentIndex + 1, maxIndex, ref solutionsFound, gameBoard, gameSolver);
+                    ValidateAllGameBoardsHelper(dices, currentIndex + 1, maxIndex, ref solutionsFound, gameBoard, gameSolver);
                 }
                 else
                 {
-                    int[,] solvedBoard = gameSolver.Solve(gameBoard.Board).SolvedBoard;
+                    int[,] solvedBoard = gameSolver.FindOneSolution(gameBoard.Board).SolvedBoard;
                     ValidateGameSolution(gameBoard.Board, solvedBoard);
                     Interlocked.Increment(ref solutionsFound);
                 }    
@@ -90,13 +89,13 @@ namespace GameSolversTests
 
         /// <summary>
         /// Validate solution.
-        /// Will throw exception if it is invalid.
+        /// Will assert if it is invalid.
         /// </summary>
         /// <param name="initialBoard">Initial starting board.</param>
         /// <param name="solvedBoard">Solved board.</param>
         public static void ValidateGameSolution(int[,] initialBoard, int[,] solvedBoard)
         {
-            ValidateBoardHelper.Print2DArray(solvedBoard);
+            //ValidateBoardHelper.Print2DArray(solvedBoard);
 
             Assert.IsTrue(
                 ValidateBoardHelper.ValidateOriginalBlockerPlacements(initialBoard, solvedBoard),

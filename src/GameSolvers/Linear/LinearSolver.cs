@@ -34,7 +34,7 @@ namespace GeniusSquareWeb.GameSolvers.Linear
         }
 
         /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        public SolverResult FindOneSolution(int[,] board)
         {
             int[] endBoard = new int[LinearRowCount];
 
@@ -92,8 +92,18 @@ namespace GeniusSquareWeb.GameSolvers.Linear
                 SolvedBoard = this.PlaceFiguresOnBoard(
                     resultColumns,
                     board),
-                NumberOfIterations = 1
+                IterationCount = 1
             };
+        }
+
+        /// <inheritdoc/>
+        public SolverResult FindAllSolutions(int[,] board)
+        {
+            // Linear solver usually can not find other solutions except
+            // the first one. You need to continously run the solver
+            // and on each run add a new constraint that the prevous run results
+            // can non be the solution to this one. So instead only find the first one.
+            return FindOneSolution(board);
         }
 
         private int[,] PlaceFiguresOnBoard(

@@ -3,6 +3,7 @@ using Node = GeniusSquareWeb.GameSolvers.DancingLinks.DlxSolver.Node;
 using GeniusSquareWeb.GameSolvers.DancingLinks;
 using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.GameElements.Dices;
+using GeniusSquareWeb.GameSolvers.DeBruijn;
 
 namespace GameSolversTests
 {
@@ -51,7 +52,7 @@ namespace GameSolversTests
             DlxSolver solver = new DlxSolver(root);
 
             // when
-            SolverResult solverResult = solver.Solve(gameBoard.Board);
+            SolverResult solverResult = solver.FindOneSolution(gameBoard.Board);
 
             // then
             Utilities.ValidateGameSolution(gameBoard.Board, solverResult.SolvedBoard);
@@ -73,6 +74,26 @@ namespace GameSolversTests
         }
 
         /// <summary>
+        /// Validate finding all solutions to one example board for Dlx solver.
+        /// </summary>
+        [TestMethod]
+        [Ignore("Test runs too long.")]
+        public void ValidateAllSolutionForOneBoard()
+        {
+            // given
+            GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
+            GameInstance gameInstance1 = gameManager.TryCreateGame();
+
+            Node root = DancingLinksHelper.GenerateDancingLinksRoot();
+            DlxSolver solver = new DlxSolver(root);
+
+            // when and then
+            SolverResult solverResult = solver.FindAllSolutions(gameInstance1.Board.Board);
+
+            Console.WriteLine($"Number of iterations to find all solutions:{solverResult.IterationCount}");
+        }
+
+        /// <summary>
         /// Solver should be able to be used to solve 2 different problems.
         /// </summary>
         [TestMethod]
@@ -87,8 +108,8 @@ namespace GameSolversTests
             DlxSolver solver = new DlxSolver(root);
 
             // when
-            SolverResult solverResult1 = solver.Solve(gameInstance1.Board.Board);
-            SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
+            SolverResult solverResult1 = solver.FindOneSolution(gameInstance1.Board.Board);
+            SolverResult solverResult2 = solver.FindOneSolution(gameInstance2.Board.Board);
 
             // then
             Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);

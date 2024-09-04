@@ -11,6 +11,16 @@
         private GameBoardField[] diceSides;
 
         /// <summary>
+        /// Set the seed of the Random generator to control
+        /// pseudo-random generation.
+        /// </summary>
+        /// <param name="seed"></param>
+        public static void SetRandomSeed(int seed)
+        {
+            Random = new Random(seed);
+        }
+
+        /// <summary>
         /// Ctor.
         /// </summary>
         public RandomDice(GameBoardField[] sides)

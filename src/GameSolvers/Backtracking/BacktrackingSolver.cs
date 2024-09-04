@@ -10,16 +10,19 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        public SolverResult FindOneSolution(int[,] board)
         {
             int[,] iteratingBoard = board;
             int figureIndex = 0;
 
             int iterationCount = 0;
+            int solutionsFoundCount = 0;
             bool result = SolverHelper(
                 iteratingBoard,
                 figureIndex,
-                ref iterationCount);
+                ref iterationCount,
+                ref solutionsFoundCount,
+                false);
 
             if (result != true)
             {
@@ -29,15 +32,58 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
             return new SolverResult
             {
                 SolvedBoard = board,
-                NumberOfIterations = iterationCount,
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionsFoundCount,
+            };
+        }
+
+        /// <inheritdoc/>
+        public SolverResult FindAllSolutions(int[,] board)
+        {
+            int[,] iteratingBoard = board;
+            int figureIndex = 0;
+
+            int iterationCount = 0;
+            int solutionFoundCount = 0;
+            _ = SolverHelper(
+                iteratingBoard,
+                figureIndex,
+                ref iterationCount,
+                ref solutionFoundCount,
+                true);
+
+            if (solutionFoundCount == 0)
+            {
+                throw new Exception("Backtracking should have found some solutions. Instead it found none");
+            }
+
+            return new SolverResult
+            {
+                SolvedBoard = null,
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionFoundCount
             };
         }
 
         private bool SolverHelper(
             int[,] board,
             int figureIndex,
-            ref int iterationCount)
+            ref int iterationCount,
+            ref int solutionsFoundCount,
+            bool shouldFindAllSolutions = false)
         {
+            
+            if (figureIndex == 9)
+            {
+                solutionsFoundCount++;
+                if (shouldFindAllSolutions)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
             iterationCount++;
 
             IEnumerable<int[,]> figureOrientationList = figureList[figureIndex];
@@ -98,8 +144,7 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
                         }
 
                         // if last figureIndex return true, else try to solve it further.
-                        if (figureIndex == 8
-                            || SolverHelper(board, figureIndex + 1, ref iterationCount))
+                        if (SolverHelper(board, figureIndex + 1, ref iterationCount, ref solutionsFoundCount, shouldFindAllSolutions))
                         {
                             return true;
                         }

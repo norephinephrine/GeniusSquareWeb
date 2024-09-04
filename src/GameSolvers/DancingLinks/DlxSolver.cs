@@ -19,7 +19,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
         }
 
         /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        public SolverResult FindOneSolution(int[,] board)
         {
             // reduce dancing links
             Node current = root.Right;
@@ -43,8 +43,9 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 }
             }
 
-            int numberOfIterations = 0;
-            if (!DlxIteration(0, ref numberOfIterations))
+            int iterationCount = 0;
+            int solutionsFoundCount = 0;
+            if (!DlxIteration(0, ref iterationCount, ref solutionsFoundCount, false))
             {
                 throw new Exception("Dlx solver should have solved the game. Instead it failed");
 
@@ -72,15 +73,88 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             return new SolverResult
             {
                 SolvedBoard = board,
-                NumberOfIterations = numberOfIterations
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionsFoundCount,
             };
         }
 
-        private bool DlxIteration(int k, ref int numberOfIterations)
+        /// <inheritdoc/>
+        public SolverResult FindAllSolutions(int[,] board)
         {
-            numberOfIterations++;
+            // reduce dancing links
+            Node current = root.Right;
+            List<Node> nodes = new();
+            for (int i = 0; i < figureList.Length; i++)
+            {
+                current = current.Right;
+            }
+
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (board[i, j] == -1)
+                    {
+                        CoverNode(current);
+                        nodes.Insert(0, current);
+                    }
+
+                    current = current.Right;
+                }
+            }
+
+            int iterationCount = 0;
+            int solutionsFoundCount = 0;
+            _ = DlxIteration(0, ref iterationCount, ref solutionsFoundCount, true);
+            if (solutionsFoundCount == 0)
+            {
+                throw new Exception("Dlx solver should found some solutions. Instead it found none.");
+
+            }
+
+            PlaceFiguresOnBoard(board, placedFigure);
+
+            for (int i = FigureCount - 1; i >= 0; i--)
+            {
+                current = placedFigure[i];
+
+                do
+                {
+                    current = current.Left;
+                    UncoverNode(current.ColumnHead);
+                }
+                while (current != placedFigure[i]);
+            }
+
+            foreach (Node node in nodes)
+            {
+                UncoverNode(node.ColumnHead);
+            }
+
+            return new SolverResult
+            {
+                SolvedBoard = null,
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionsFoundCount,
+            };
+        }
+
+        private bool DlxIteration(
+            int k,
+            ref int iterationCount,
+            ref int solutionsFoundCount,
+            bool shouldFindAllSolutions)
+        {
+            iterationCount++;
             if (root.Right == root)
             {
+                solutionsFoundCount++;
+
+                if (shouldFindAllSolutions)
+                {
+                    return false;
+                }
+
                 return true;
             }
 
@@ -103,7 +177,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                     j = j.Right;
                 }
 
-                if (DlxIteration(k + 1, ref numberOfIterations))
+                if (DlxIteration(k + 1, ref iterationCount, ref solutionsFoundCount, shouldFindAllSolutions))
                 {
                     return true;
                 }
@@ -129,19 +203,18 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
         /// </summary>
         private Node GetNextMinColumn(Node root)
         {
-            Node iNode = null;
-            Node jNode = null;
+            Node currentNode = root.Right;
 
-            iNode = root.Right.Right;
-            Node minimumNode = root.Right;
-            while (iNode != root)
+            Node minimumNode = currentNode;
+            currentNode = root.Right.Right;
+            while (currentNode != root)
             {
-                if (iNode.Size < minimumNode.Size)
+                if (currentNode.Size < minimumNode.Size)
                 {
-                    minimumNode = iNode;
+                    minimumNode = currentNode;
                 }
 
-                iNode = iNode.Right;
+                currentNode = currentNode.Right;
             }
 
             return minimumNode;

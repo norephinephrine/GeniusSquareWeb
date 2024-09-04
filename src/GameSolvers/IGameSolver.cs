@@ -6,8 +6,17 @@
     public interface IGameSolver
     {
         /// <summary>
-        /// Solve game.
+        /// Find one solution.
         /// </summary>
-        public SolverResult Solve(int[,] board);
+        /// <param name="board">Board to solve.</param>
+        /// <returns>Solutions.</returns>
+        public SolverResult FindOneSolution(int[,] board);
+
+        /// <summary>
+        /// Find all solutions.
+        /// </summary>
+        /// <param name="board">Board to solve.</param>
+        /// <returns>Solutions.</returns>
+        public SolverResult FindAllSolutions(int[,] board);
     }
 }

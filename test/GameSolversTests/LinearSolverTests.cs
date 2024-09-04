@@ -2,6 +2,7 @@
 using GeniusSquareWeb.GameElements.Dices;
 using GeniusSquareWeb.GameSolvers;
 using GeniusSquareWeb.GameSolvers.Backtracking;
+using GeniusSquareWeb.GameSolvers.DeBruijn;
 using GeniusSquareWeb.GameSolvers.Linear;
 using GeniusSquareWeb.GameSolvers.Linear.IlpSolvers;
 
@@ -66,7 +67,7 @@ namespace GameSolversTests
             LinearSolver solver = new LinearSolver(ilpSolver);
 
             // when
-            SolverResult solvedReulst = solver.Solve(gameBoard.Board);
+            SolverResult solvedReulst = solver.FindOneSolution(gameBoard.Board);
 
             // then
             Utilities.ValidateGameSolution(gameBoard.Board, solvedReulst.SolvedBoard);
@@ -102,12 +103,12 @@ namespace GameSolversTests
             LinearSolver solver = new LinearSolver(ilpSolver);
 
             // when
-            SolverResult solverResult1 = solver.Solve(gameInstance1.Board.Board);
-            SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
+            SolverResult solverResult1 = solver.FindOneSolution(gameInstance1.Board.Board);
+            SolverResult solverResult2 = solver.FindOneSolution(gameInstance2.Board.Board);
 
             // then
             Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
             Utilities.ValidateGameSolution(gameInstance2.Board.Board, solverResult2.SolvedBoard);
-        }   
+        }
     }
 }

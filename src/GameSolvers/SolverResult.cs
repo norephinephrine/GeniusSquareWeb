@@ -6,7 +6,8 @@
     public struct SolverResult
     {
         public int[,] SolvedBoard;
-        public int NumberOfIterations = 0;
+        public int IterationCount = 0;
+        public int SolutionsFoundCount = 0;
 
         /// <summary>
         /// Ctor.

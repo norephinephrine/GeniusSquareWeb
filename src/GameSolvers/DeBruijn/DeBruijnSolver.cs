@@ -12,17 +12,20 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
         private IEnumerable<int[,]>[] figureList = DefaultFigures.FigureListOrientations;
 
         /// <inheritdoc/>
-        public SolverResult Solve(int[,] board)
+        public SolverResult FindOneSolution(int[,] board)
         {
             int[,] iteratingBoard = board;
             bool[] isFigurePlaced = new bool[FigureCount];
 
 
-            int numberOfIterations = 0;
+            int iterationCount = 0;
+            int solutionsFoundCount = 0;
             bool result = SolverHelper(
                 iteratingBoard,
                 isFigurePlaced,
-                ref numberOfIterations);
+                ref iterationCount,
+                ref solutionsFoundCount,
+                false);
             if (result != true)
             {
 
@@ -32,16 +35,47 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
             return new SolverResult
             {
                 SolvedBoard = board,
-                NumberOfIterations = numberOfIterations
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionsFoundCount,
+            };
+        }
+
+        /// <inheritdoc/>
+        public SolverResult FindAllSolutions(int[,] board)
+        {
+            int[,] iteratingBoard = board;
+            bool[] isFigurePlaced = new bool[FigureCount];
+
+            int iterationCount = 0;
+            int solutionsFoundCount = 0;
+            _ = SolverHelper(
+                iteratingBoard,
+                isFigurePlaced,
+                ref iterationCount,
+                ref solutionsFoundCount,
+                true);
+
+            if (solutionsFoundCount == 0)
+            {
+                throw new Exception("De Bruijn solver should have found a solution. Instead it found none");
+            }
+
+            return new SolverResult
+            {
+                SolvedBoard = null,
+                IterationCount = iterationCount,
+                SolutionsFoundCount = solutionsFoundCount,
             };
         }
 
         private bool SolverHelper(
             int[,] board,
             bool[] isFigurePlaced,
-            ref int numberOfIterations)
+            ref int iterationCount,
+            ref int solutionsFoundCount,
+            bool shouldFindAllSolutions)
         {
-            numberOfIterations++;
+            iterationCount++;
 
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
@@ -49,6 +83,13 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
             Tuple<int, int>? holeIndex = FindNextEmptyCell(board);
             if (holeIndex == null)
             {
+                solutionsFoundCount++;
+
+                if (shouldFindAllSolutions)
+                {
+                    return false;
+                }
+
                 return true;
             }
 
@@ -126,7 +167,7 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
 
                     // next figure placement start
                     isFigurePlaced[figureIndex] = true;
-                    if (SolverHelper(board, isFigurePlaced, ref numberOfIterations))
+                    if (SolverHelper(board, isFigurePlaced, ref iterationCount, ref solutionsFoundCount, shouldFindAllSolutions))
                     {
                         return true;
                     }

@@ -12,16 +12,34 @@ namespace GameSolversTests
     public class DeBruijnSolverTests
     {
         /// <summary>
-        /// Validate all solutions for De Bruijn solver.
+        /// Validate finding allsolutions for all boards for De Bruijn solver.
         /// </summary>
         [TestMethod]
-        public void ValidateAllSolution()
+        public void ValidateFindingOneSolutionsForAllBoards()
         {
             // given
             DeBruijnSolver solver = new DeBruijnSolver();
 
             // when and then
             Utilities.SolveAndValidateAllGameBoards(solver, true);
+        }
+
+        /// <summary>
+        /// Validate finding all solutions to one example board for De Bruijn solver.
+        /// </summary>
+        [TestMethod]
+        public void ValidateAllSolutionForOneBoard()
+        {
+            // given
+            GameManager gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
+            GameInstance gameInstance1 = gameManager.TryCreateGame();
+
+            DeBruijnSolver solver = new DeBruijnSolver();
+
+            // when and then
+           SolverResult solverResult = solver.FindAllSolutions(gameInstance1.Board.Board);
+
+            Console.WriteLine($"Number of iterations to find all solutions:{solverResult.IterationCount}");
         }
 
         /// <summary>
@@ -38,8 +56,8 @@ namespace GameSolversTests
             DeBruijnSolver solver = new DeBruijnSolver();
 
             // when
-            SolverResult solverResult1 = solver.Solve(gameInstance1.Board.Board);
-            SolverResult solverResult2 = solver.Solve(gameInstance2.Board.Board);
+            SolverResult solverResult1 = solver.FindOneSolution(gameInstance1.Board.Board);
+            SolverResult solverResult2 = solver.FindOneSolution(gameInstance2.Board.Board);
 
             // then
             Utilities.ValidateGameSolution(gameInstance1.Board.Board, solverResult1.SolvedBoard);
