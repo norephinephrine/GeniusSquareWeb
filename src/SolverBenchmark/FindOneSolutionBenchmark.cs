@@ -20,72 +20,68 @@ namespace GeniusSquareWeb.SolverBenchmark
     {
         private GameManager gameManager;
 
-        private BacktrackingSolver BacktrackingSolver;
-        private DeBruijnSolver DeBruijnSolver;
-        private DlxSolver DlxSolver;
-
-        private LinearSolver BopLinearSolver;
-        private LinearSolver ScipLinearSolver;
-        private LinearSolver SatLinearSolver;
-
         /// <summary>
         /// Ctor
         /// </summary>
         public FindOneSolutionBenchmark()
         {
             this.gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
-
-            BacktrackingSolver = new BacktrackingSolver();
-            DeBruijnSolver = new DeBruijnSolver();
-            DlxSolver = new DlxSolver(DancingLinksHelper.GenerateDancingLinksRoot());
-
-            BopLinearSolver = new LinearSolver(new BopIlpSolver());
-            ScipLinearSolver = new LinearSolver(new ScipIlpSolver());
-            SatLinearSolver = new LinearSolver(new SatIlpSolver());
-
             RandomDice.SetRandomSeed(12345); // setting seed so execution use same pseudo-number sequences
         }
 
         [Benchmark]
         public int[,] DefaultBacktracking()
         {
+            BacktrackingSolver backtrackingSolver = new BacktrackingSolver();
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return BacktrackingSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return backtrackingSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DeBruijn()
         {
+            DeBruijnSolver deBruijnSolver = new DeBruijnSolver();
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DeBruijnSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return deBruijnSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DancingLinksAlgorithmX()
         {
+            DlxSolver dlxSolver = new DlxSolver(DancingLinksHelper.GenerateDancingLinksRoot());
+
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DlxSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return dlxSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_SCIP()
         {
+            LinearSolver scipLinearSolver = new LinearSolver(new ScipIlpSolver());
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return ScipLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return scipLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_BOP()
         {
+            LinearSolver bopLinearSolver = new LinearSolver(new BopIlpSolver());
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return BopLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return bopLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] ILP_CP_SAT()
         {
+            LinearSolver satLinearSolver = new LinearSolver(new SatIlpSolver());
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return SatLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
+            return satLinearSolver.FindOneSolution(gameInstance.Board.Board).SolvedBoard;
         }
     }
 }

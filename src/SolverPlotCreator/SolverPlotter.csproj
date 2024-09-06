@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net8.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+		<RootNamespace>SolverPlotCreator</RootNamespace>
+		<AssemblyName>$(RootNamespace)</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GameElements\GameElements.csproj" />
+		<ProjectReference Include="..\GameSolvers\GameSolvers.csproj" />
+	</ItemGroup>
+
+</Project>

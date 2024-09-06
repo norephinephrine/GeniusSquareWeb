@@ -72,7 +72,10 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
             ref int solutionsFoundCount,
             bool shouldFindAllSolutions = false)
         {
-            
+            iterationCount++;
+
+            // if the figureIndex is 9 it means we found a solution since all the previous 
+            // recursion iterations managed to place a figure on the board.
             if (figureIndex == 9)
             {
                 solutionsFoundCount++;
@@ -84,8 +87,7 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
                 return true;
             }
 
-            iterationCount++;
-
+            // all orientations for this figure
             IEnumerable<int[,]> figureOrientationList = figureList[figureIndex];
             int rowCount = board.GetLength(0);
             int columnCount = board.GetLength(1);
@@ -100,6 +102,7 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
                         int figureColumnCount = figureOrientation.GetLength(1);
 
                         // validate figure placement.
+                       // if placement is invalid set isNotValid to true.
                         bool isNotValidFigure = false;
                         for (int i = 0; i < figureRowCount; i++)
                         {
@@ -117,12 +120,14 @@ namespace GeniusSquareWeb.GameSolvers.Backtracking
                                 }
                             }
 
+                            // break early since figure placement is invalid
                             if (isNotValidFigure)
                             {
                                 break;
                             }
                         }
 
+                        // continue to next loop since current figure placement is invalid.
                         if (isNotValidFigure)
                         {
                             continue;

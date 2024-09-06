@@ -18,43 +18,41 @@ namespace GeniusSquareWeb.SolverBenchmark
     {
         private GameManager gameManager;
 
-        private BacktrackingSolver BacktrackingSolver;
-        private DeBruijnSolver DeBruijnSolver;
-        private DlxSolver DlxSolver;
-
         /// <summary>
         /// Ctor.
         /// </summary>
         public FindAllSolutionsForOneBoardBenchmark()
         {
             this.gameManager = new GameManager(DefaultDices.GetAllDefaultDices());
-
-            BacktrackingSolver = new BacktrackingSolver();
-            DeBruijnSolver = new DeBruijnSolver();
-            DlxSolver = new DlxSolver(DancingLinksHelper.GenerateDancingLinksRoot());
-
             RandomDice.SetRandomSeed(12345); // setting seed so execution use same pseudo-number sequences
         }
 
         [Benchmark]
         public int[,] DefaultBacktracking()
         {
+            BacktrackingSolver backtrackingSolver = new BacktrackingSolver();
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return BacktrackingSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
+            return backtrackingSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DeBruijn()
         {
+            DeBruijnSolver deBruijnSolver = new DeBruijnSolver();
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DeBruijnSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
+            return deBruijnSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
         }
 
         [Benchmark]
         public int[,] DancingLinksAlgorithmX()
         {
+            DlxSolver dlxSolver = new DlxSolver(DancingLinksHelper.GenerateDancingLinksRoot());
+
+
             GameInstance gameInstance = gameManager.TryCreateGame();
-            return DlxSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
+            return dlxSolver.FindAllSolutions(gameInstance.Board.Board).SolvedBoard;
         }
     }
 }

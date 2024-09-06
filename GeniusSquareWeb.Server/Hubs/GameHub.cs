@@ -98,7 +98,7 @@ public class GameHub : Hub
             Context.ConnectionId,
             gameInstance.GameId.ToString());
 
-        await Clients.All.SendAsync("ReloadGames");
+        //await Clients.All.SendAsync("ReloadGames");
 
         GameRecord record = new(
             gameGuid: gameInstance.GameId,
@@ -228,9 +228,9 @@ public class GameHub : Hub
 
         gameManager.TryDeleteGame(gameId);
 
-        await Clients
-            .Group(gameInstance.GameId.ToString())
-            .SendAsync("ReloadGames");
+        //await Clients
+        //    .Group(gameInstance.GameId.ToString())
+        //    .SendAsync("ReloadGames");
 
         return true;
     }

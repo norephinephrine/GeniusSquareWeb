@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameElementsTests", "test\G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolverBenchmark", "src\SolverBenchmark\SolverBenchmark.csproj", "{42B75EA8-418A-4D7C-BB0D-E82FB2DD19C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolverPlotter", "src\SolverPlotCreator\SolverPlotter.csproj", "{7389E937-C257-48F0-BAD7-697EC11390DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{42B75EA8-418A-4D7C-BB0D-E82FB2DD19C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42B75EA8-418A-4D7C-BB0D-E82FB2DD19C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42B75EA8-418A-4D7C-BB0D-E82FB2DD19C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7389E937-C257-48F0-BAD7-697EC11390DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7389E937-C257-48F0-BAD7-697EC11390DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7389E937-C257-48F0-BAD7-697EC11390DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7389E937-C257-48F0-BAD7-697EC11390DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{3549EFD3-B1AF-4ABF-ADE1-C674CC6760C5} = {86111608-9C61-4B49-8A44-1D9892FF6ECB}
 		{E45996FE-2D99-4A38-A62A-C1F608ACC28E} = {7F318E97-4CEB-476F-A4E4-E3347BF20590}
 		{42B75EA8-418A-4D7C-BB0D-E82FB2DD19C1} = {86111608-9C61-4B49-8A44-1D9892FF6ECB}
+		{7389E937-C257-48F0-BAD7-697EC11390DF} = {86111608-9C61-4B49-8A44-1D9892FF6ECB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8AC0AA7-161D-4C1D-ACF5-F8CFAEABD3DE}

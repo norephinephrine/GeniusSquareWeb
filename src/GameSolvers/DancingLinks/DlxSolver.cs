@@ -35,7 +35,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 {
                     if (board[i, j] == -1)
                     {
-                        CoverNode(current);
+                        CoverColumn(current);
                         nodes.Insert(0, current);
                     }
 
@@ -60,14 +60,14 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 do
                 {
                     current = current.Left;
-                    UncoverNode(current.ColumnHead);
+                    UncoverColumn(current.ColumnHead);
                 }
                 while (current != placedFigure[i]);
             }
 
             foreach (Node node in nodes)
             {
-                UncoverNode(node.ColumnHead);
+                UncoverColumn(node.ColumnHead);
             }
 
             return new SolverResult
@@ -95,7 +95,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 {
                     if (board[i, j] == -1)
                     {
-                        CoverNode(current);
+                        CoverColumn(current);
                         nodes.Insert(0, current);
                     }
 
@@ -121,14 +121,14 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
                 do
                 {
                     current = current.Left;
-                    UncoverNode(current.ColumnHead);
+                    UncoverColumn(current.ColumnHead);
                 }
                 while (current != placedFigure[i]);
             }
 
             foreach (Node node in nodes)
             {
-                UncoverNode(node.ColumnHead);
+                UncoverColumn(node.ColumnHead);
             }
 
             return new SolverResult
@@ -146,6 +146,9 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             bool shouldFindAllSolutions)
         {
             iterationCount++;
+
+            // if root.Right is equal to root that means that all columns were covered
+            // and that a solution has been found.
             if (root.Right == root)
             {
                 solutionsFoundCount++;
@@ -161,45 +164,48 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             // choose next minimum
             Node c = GetNextMinColumn(root);
 
-            // cover cell
-            CoverNode(c);
+            // cover column
+            CoverColumn(c);
 
             // pick row
             Node r = c.Down;
             while (r != c)
             {
+                // save starting Node in linked list representing row.
                 placedFigure[k] = r;
 
+                // cover all columns of the chosen row
                 Node j = r.Right;
                 while (j != r)
                 {
-                    CoverNode(j.ColumnHead);
+                    CoverColumn(j.ColumnHead);
                     j = j.Right;
                 }
 
+                // next iteration
                 if (DlxIteration(k + 1, ref iterationCount, ref solutionsFoundCount, shouldFindAllSolutions))
                 {
                     return true;
                 }
 
+                // uncover all columns of the chosen row
                 j = r.Left;
                 while (j != r)
                 {
-                    UncoverNode(j.ColumnHead);
+                    UncoverColumn(j.ColumnHead);
                     j = j.Left;
                 }
 
                 r = r.Down;
             }
 
-            // uncover cell
-            UncoverNode(c);
+            // uncover column
+            UncoverColumn(c);
             return false;
         }
 
         /// <summary>
-        /// Choose next cell with minimum size for DLX to process.
-        /// 
+        /// Choose next column with minimum size for DLX to process. 
         /// </summary>
         private Node GetNextMinColumn(Node root)
         {
@@ -220,7 +226,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             return minimumNode;
         }
 
-        private void CoverNode(Node c)
+        private void CoverColumn(Node c)
         {
             Node i = null;
             Node j = null;
@@ -245,7 +251,7 @@ namespace GeniusSquareWeb.GameSolvers.DancingLinks
             }
         }
 
-        private void UncoverNode(Node c)
+        private void UncoverColumn(Node c)
         {
             Node i = null;
             Node j = null;

@@ -77,9 +77,9 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
         {
             iterationCount++;
 
-            int rowCount = board.GetLength(0);
-            int columnCount = board.GetLength(1);
-
+            // find next empty cell,
+            // If null is returned that means there are
+            // no more empty cells and a solution has been found
             Tuple<int, int>? holeIndex = FindNextEmptyCell(board);
             if (holeIndex == null)
             {
@@ -92,6 +92,10 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
 
                 return true;
             }
+
+
+            int rowCount = board.GetLength(0);
+            int columnCount = board.GetLength(1);
 
             for (int figureIndex = 0; figureIndex < FigureCount; figureIndex++)
             {
@@ -122,6 +126,7 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
                     }
 
                     // validate figure placement.
+                    // if placement is invalid set isNotValidFigure to true.
                     bool isNotValidFigure = false;
                     for (int i = 0; i < figureRowCount; i++)
                     {
@@ -145,6 +150,7 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
                         }
                     }
 
+                    // continue to next loop since current placement is invalid.
                     if (isNotValidFigure)
                     {
                         continue;
@@ -164,16 +170,16 @@ namespace GeniusSquareWeb.GameSolvers.DeBruijn
                             }
                         }
                     }
+                    isFigurePlaced[figureIndex] = true;
 
                     // next figure placement start
-                    isFigurePlaced[figureIndex] = true;
                     if (SolverHelper(board, isFigurePlaced, ref iterationCount, ref solutionsFoundCount, shouldFindAllSolutions))
                     {
                         return true;
                     }
-                    isFigurePlaced[figureIndex] = false;
 
                     // remove figure
+                    isFigurePlaced[figureIndex] = false;
                     for (int i = 0; i < figureRowCount; i++)
                     {
                         for (int j = 0; j < figureColumnCount; j++)

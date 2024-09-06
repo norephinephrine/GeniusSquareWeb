@@ -77,7 +77,6 @@ namespace GameSolversTests
         /// Validate finding all solutions to one example board for Dlx solver.
         /// </summary>
         [TestMethod]
-        [Ignore("Test runs too long.")]
         public void ValidateAllSolutionForOneBoard()
         {
             // given
