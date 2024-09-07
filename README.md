@@ -5,3 +5,6 @@ There are also solvers in the code that use integer linear programming to find s
 
 App can be started in Development mode by running the below command from the root of the repo:  
 `dotnet run --project ".\GeniusSquareWeb.Server" --launch-profile "https"`
+
+The app can then be found on the address:  
+`https://localhost:5173/`
